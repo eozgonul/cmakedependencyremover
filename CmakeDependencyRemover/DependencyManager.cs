@@ -89,8 +89,7 @@ namespace CmakeDependencyRemover
                 string fileContent;
 
                 // \bProject\b\(\"\{([A-Z|0-9]+-*){5}\}\"\)\s=\s\"(\bALL_BUILD\b|\bZERO_CHECK\b)\".*?\bEndProject\b
-                // (\bProject\b\(\"\{([A-Z|0-9]+-*){5}\}\"\)\s=\s\"(\bALL_BUILD\b|\bZERO_CHECK\b)\",\s\"(\bALL_BUILD\b|\bZERO_CHECK\b).vcxproj",\s\"\{)([A-Z|0-9]+-*){5}\}"
-
+                
                 string regularExpression = "\\bProject\\b\\(\"\\{([A-Z|0-9]+-*){5}\\}\"\\)\\s=\\s\"(\\bALL_BUILD\\b|\\bZERO_CHECK\\b)\".*?\\bEndProject\\b";
                 Regex regex = new Regex(regularExpression, RegexOptions.Singleline);
 
@@ -112,16 +111,13 @@ namespace CmakeDependencyRemover
 
         public string DetectProjectUID(string fileContent, string projectName)
         {
-            Regex regex = new Regex("[A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12}", RegexOptions.Singleline);
+            //Regex regex = new Regex("[A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12}", RegexOptions.Singleline);
 
-            var matches = regex.Matches(fileContent);
+            Regex regex = new Regex("(?<=\\\"" + projectName + "\\.vcxproj\\\"\\,\\s\\\"\\{)([A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12})");
 
-            if(matches.Count < 2)
-            {
-                return "";
-            }
+            var match = regex.Match(fileContent);
 
-            return matches[1].Value;
+            return match.Value;
         }
 
         public List<string> DetectSolutionConfigurations(string fileContent)

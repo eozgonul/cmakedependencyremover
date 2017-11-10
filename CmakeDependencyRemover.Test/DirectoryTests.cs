@@ -153,14 +153,25 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("ProjectFile")]
-        public void DetectProjectUIDFromSolutionFile()
+        public void DetectProjectUIDFromSolutionFile_AllBuildUIDChecked_True()
         {
             var fileContent = File.ReadAllText(existingSolutionDirectory + "\\Boggle.sln");
 
             var result = DependencyManager.DetectProjectUID(fileContent, "ALL_BUILD");
 
-            Assert.AreNotEqual("", result);
+            Assert.AreEqual("8BAE2EF6-B67E-3634-9B27-B99536808058", result);
         }
+
+        [Test, Category("ProjectFile")]
+        public void DetectProjectUIDFromSolutionFile_ZeroCheckUIDChecked_True()
+        {
+            var fileContent = File.ReadAllText(existingSolutionDirectory + "\\Boggle.sln");
+
+            var result = DependencyManager.DetectProjectUID(fileContent, "ZERO_CHECK");
+
+            Assert.AreEqual("B28D5454-5C92-348F-BB2D-BB0B9FAE4192", result);
+        }
+
 
         [Test, Category("ProjectFile")]
         public void DetectSolutionConfigurations_Debugx64Releasex64_True()
