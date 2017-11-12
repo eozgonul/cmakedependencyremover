@@ -52,7 +52,7 @@ namespace CmakeDependencyRemover.Test
                                                          "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\ZERO_CHECK.vcxproj",
                                                          "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\ZERO_CHECK.vcxproj.filters"};
 
-            listConfigurations = new List<string> { "Debug|x64 ", "Release|x64" };
+            listConfigurations = new List<string> { "Debug|x64", "Release|x64" };
         }
 
 
@@ -177,8 +177,10 @@ namespace CmakeDependencyRemover.Test
         public void DetectSolutionConfigurations_Debugx64Releasex64_True()
         {
             var fileContent = File.ReadAllText(existingSolutionDirectory + "\\Boggle.sln");
-            
-            Assert.True(listConfigurations.SequenceEqual<string>(DependencyManager.DetectSolutionConfigurations(fileContent)));
+
+            var solutionConfigurations = DependencyManager.DetectSolutionConfigurations(fileContent);
+
+            Assert.True(listConfigurations.SequenceEqual<string>(solutionConfigurations));
         }
 
         [Test, Category("ProjectFile")]

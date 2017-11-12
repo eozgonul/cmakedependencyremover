@@ -111,8 +111,6 @@ namespace CmakeDependencyRemover
 
         public string DetectProjectUID(string fileContent, string projectName)
         {
-            //Regex regex = new Regex("[A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12}", RegexOptions.Singleline);
-
             Regex regex = new Regex("(?<=\\\"" + projectName + "\\.vcxproj\\\"\\,\\s\\\"\\{)([A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12})");
 
             var match = regex.Match(fileContent);
@@ -122,20 +120,21 @@ namespace CmakeDependencyRemover
 
         public List<string> DetectSolutionConfigurations(string fileContent)
         {
-            //(?<=(GlobalSection\(SolutionConfigurationPlatforms\)\s\=\spreSolution))((\s\s\s[A-z0-9]+\|[A-z0-9]+)(?:\s\=\s[A-z0-9]+\|[A-z0-9]+))+(?=(\s\sEndGlobalSection))
+            //(?<=GlobalSection\(SolutionConfigurationPlatforms\)\s\=\spreSolution\s)(\s*[A-z0-9]+\|[A-z0-9]+\s\=\s[A-z0-9]+\|[A-z0-9]+)+(?=\s*EndGlobalSection)
 
-            Regex regexUnseparatedConfigList = new Regex("(?<=(GlobalSection\\(SolutionConfigurationPlatforms\\)\\s\\=\\spreSolution))((\\s\\s\\s[A-z0-9]+\\|[A-z0-9]+)(\\s\\=\\s[A-z0-9]+\\|[A-z0-9]+))+(?=(\\s\\sEndGlobalSection))", RegexOptions.Singleline);
+            var regexUnseparatedConfigList = new Regex("(?<=GlobalSection\\(SolutionConfigurationPlatforms\\)\\s\\=\\spreSolution\\s)(\\s*[A-z0-9]+\\|[A-z0-9]+\\s\\=\\s[A-z0-9]+\\|[A-z0-9]+)+(?=\\s*EndGlobalSection)"/*, RegexOptions.Singleline*/);
+
 
             var unseparatedConfig = regexUnseparatedConfigList.Match(fileContent);
 
             if(unseparatedConfig.Success)
             {
-                Regex regexConfigs = new Regex(@"(?<=(=\s))[A-z0-9]+\|[A-z0-9]+", RegexOptions.Singleline);
+                Regex regexConfigs = new Regex("([A-z0-9]+\\|[A-z0-9]+)(?=\\s*\\=\\s[A-z0-9]+\\|[A-z0-9]+)", RegexOptions.Singleline);
                 var matchesConfigs = regexConfigs.Matches(unseparatedConfig.Value);
 
                 if(matchesConfigs.Count != 0)
                 {
-                    List<string> listConfigs = new List<string>();
+                    var listConfigs = new List<string>();
 
                     foreach(Match match in matchesConfigs)
                     {
@@ -151,18 +150,7 @@ namespace CmakeDependencyRemover
 
         public bool RemoveProjectUIDFromGlobalSettings(string fileContent, string uid)
         {
-            Regex regex = new Regex("", RegexOptions.Singleline);
-
-            var matches = regex.Matches(fileContent);
-
-            if(matches.Count == 0)
-            {
-                return false;
-            }
-            else
-            {
-                return true;
-            }
+            return false;
         }
     }
 }
