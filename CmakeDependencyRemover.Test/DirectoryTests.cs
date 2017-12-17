@@ -12,144 +12,260 @@ namespace CmakeDependencyRemover.Test
     [TestFixture]
     class DirectoryTests
     {
-        string existingSolutionDirectory;
-        string nonExistingSolutionDirectory;
+        string existingDirectory;
+        string nonExistingDirectory;
+
         string emptyDirectory;
+        List<string> filesAllBuild;
+        List<string> filesZeroCheck;
 
-        List<string> listAvailableExtensions;
-        List<string> listNonAvailableExtensions;
-        List<string> listEmptyExtensions;
-        List<string> listNullExtensions;
+        [SetUp]
+        public void SetDirectories()
+        {
+            existingDirectory = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory)) + @"\resource\FileExtensionTest";
+            nonExistingDirectory = existingDirectory + @"\nonexisting\directory";
 
-        List<string> listFilesWithExtensions;
-        List<string> listConfigurations;
+            emptyDirectory = existingDirectory + @"\emptydirectory";
 
-        CmakeDependencyRemover.IDependencyManager DependencyManager;
+            filesAllBuild = new List<string> { existingDirectory + @"\ALL_BUILD.vcxproj",
+                                               existingDirectory + @"\ALL_BUILD.vcxproj.filters",
+                                               existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj",
+                                               existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj.filters", };
 
+            filesZeroCheck = new List<string> { existingDirectory + @"\ZERO_CHECK.vcxproj",
+                                                existingDirectory + @"\ZERO_CHECK.vcxproj.filters",
+                                                existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj",
+                                                existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj.filters"};                                        
+        }
+
+        [Test, Category("Directory")]
+        public void CheckIfDirectoryExists_DirectoryExists_ReturnTrue()
+        {
+            var result = DirectoryManager.CheckIfDirectoryExists(existingDirectory);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test, Category("Directory")]
+        public void CheckIfDirectoryExists_DirectoryDoesNotExist_ReturnFalse()
+        {
+            var result = DirectoryManager.CheckIfDirectoryExists(nonExistingDirectory);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test, Category("Directory")]
+        public void CheckIfDirectoryEmpty_DirectoryNotEmpty_ReturnTrue()
+        {
+            var result = DirectoryManager.CheckIfDirectoryEmpty(existingDirectory);
+
+            Assert.That(result, Is.False);
+        }
+
+        [Test, Category("Directory")]
+        public void CheckIfDirectoryEmpty_DirectoryDoesNotExist_ReturnTrue()
+        {
+            var result = DirectoryManager.CheckIfDirectoryEmpty(nonExistingDirectory);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test, Category("Directory")]
+        public void CheckIfDirectoryEmpty_DirectoryEmpty_ReturnTrue()
+        {
+            var result = DirectoryManager.CheckIfDirectoryEmpty(emptyDirectory);
+
+            Assert.That(result, Is.True);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryDoesNotExistFileNameNull_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(nonExistingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryDoesNotExistFileNameEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(nonExistingDirectory, "");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryDoesNotExistFileNameSet_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(nonExistingDirectory, "someFileName");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryEmptyFileNameNull_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(emptyDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameNull_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(existingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryEmptyFileNameEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(emptyDirectory, "");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryEmptyFileNameSet_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(emptyDirectory, "ALL_BUILD");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameAllBuild_ReturnAllBuildFiles()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "ALL_BUILD");
+
+            Assert.That(filesAllBuild.SequenceEqual<string>(result), Is.True);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameZeroCheck_ReturnZeroCheckFiles()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "ZERO_CHECK");
+
+            Assert.That(filesZeroCheck.SequenceEqual<string>(result), Is.True);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameDoesNotExist_ReturnEmpty()
+        {
+            var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "NonExistingFileName");
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryDoesNotExistFileNameNull_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryDoesNotExistFileNameEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryDoesNotExistFileNameSet_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, "ALL_BUILD");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryEmptyFileNameNull_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(emptyDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryEmptyFileNameEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(emptyDirectory, "");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryEmptyFileNameSet_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(emptyDirectory, "ALL_BUILD");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameNull_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameDoesNotExist_ReturnNull()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "someFileName");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameAllBuild_ReturnListOfDeletedAllBuildFiles()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "ALL_BUILD");
+
+            Assert.True(filesAllBuild.SequenceEqual(result) &&
+                        Directory.GetFiles(existingDirectory).Where(s => Path.GetFileName(s).Equals("ALL_BUILD.vcxproj")).Count() == 0 &&
+                        Directory.GetFiles(existingDirectory).Where(s => Path.GetFileName(s).Equals("ALL_BUILD.vcxproj.filters")).Count() == 0);
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameZeroCheck_ReturnListOfDeletedZeroCheckFiles()
+        {
+            var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "ZERO_CHECK");
+
+            Assert.True(filesZeroCheck.SequenceEqual(result) &&
+                        Directory.GetFiles(existingDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj")).Count() == 0 &&
+                        Directory.GetFiles(existingDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj.filters")).Count() == 0);
+        }
+    }
+}
+
+        /*
 
         [SetUp]
         public void SetupSolutionPath()
         {
-            DependencyManager = new CmakeDependencyRemover.DependencyManager();
-
-            existingSolutionDirectory = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory)) + "\\resource\\FileExtensionTest";
-            nonExistingSolutionDirectory = existingSolutionDirectory + "\\nonexisting\\directory";
-            emptyDirectory = existingSolutionDirectory + "\\emptydirectory";
-
-            listAvailableExtensions = new List<string> { ".sln", ".vcxproj", ".filters"};
-            listNonAvailableExtensions = new List<string> {"dumymextension1", "dummyExtension2"};
-            listEmptyExtensions = new List<string>();
-            listNullExtensions = null;
-
-            listFilesWithExtensions = new List<string> { "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\ALL_BUILD.vcxproj",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\ALL_BUILD.vcxproj.filters",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\Boggle.sln",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\ZERO_CHECK.vcxproj",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\ZERO_CHECK.vcxproj.filters",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\ALL_BUILD.vcxproj",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\ALL_BUILD.vcxproj.filters",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\Boggle.sln",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\ZERO_CHECK.vcxproj",
-                                                         "C:\\Users\\eozgonul\\Documents\\Visual Studio 2017\\Projects\\CmakeDependencyRemover\\CmakeDependencyRemover.Test\\resource\\FileExtensionTest\\SomeInnerDirectory\\ZERO_CHECK.vcxproj.filters"};
-
             listConfigurations = new List<string> { "Debug|x64", "Release|x64" };
-        }
-
-
-        [Test, Category("Directory")]
-        public void IsDirectoryValid_DirectoryValid_True()
-        {
-            TestContext.WriteLine(existingSolutionDirectory);
-
-            Assert.True(DependencyManager.CheckIfSolutionDirectoryExists(existingSolutionDirectory));
-        }
-
-        [Test, Category("Directory")]
-        public void IsDirectoryValid_DirectoryInvalid_False()
-        {
-            Assert.False(DependencyManager.CheckIfSolutionDirectoryExists(nonExistingSolutionDirectory));
-        }
-
-        [Test, Category("Directory")]
-        public void IsDirectoryEmpty_DirectoryNotEmpty_False()
-        {
-            Assert.False(DependencyManager.CheckIsSolutionDirectoryEmpty(existingSolutionDirectory));
-        }
-
-        [Test, Category("Directory")]
-        public void IsDirectoryEmpty_DirectoryEmpty_True()
-        {
-            Assert.True(DependencyManager.CheckIsSolutionDirectoryEmpty(emptyDirectory));
-        }
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_DirectoryDoesNotExist_Null()
-        {
-            Assert.Null(DependencyManager.GetAllFilesWithGivenExtensions(nonExistingSolutionDirectory, listAvailableExtensions));
-        }
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_DirectoryEmpty_Null()
-        {
-            Assert.Null(DependencyManager.GetAllFilesWithGivenExtensions(emptyDirectory, listAvailableExtensions));
-        }
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_ExtensionListEmpty_Null()
-        {
-            Assert.Null(DependencyManager.GetAllFilesWithGivenExtensions(existingSolutionDirectory, listEmptyExtensions));
-        }
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_ExtensionListNull_Null()
-        {
-            Assert.Null(DependencyManager.GetAllFilesWithGivenExtensions(existingSolutionDirectory, listNullExtensions));
-        }
-
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_FilesWithExtensionsNotPresent_Null()
-        {
-            Assert.IsEmpty(DependencyManager.GetAllFilesWithGivenExtensions(existingSolutionDirectory, listNonAvailableExtensions));
-        }
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_FilesWithExtensionsPresent_Return10Items()
-        {
-            Assert.AreEqual(10, DependencyManager.GetAllFilesWithGivenExtensions(existingSolutionDirectory, listAvailableExtensions).Count());
-        }
-
-        [Test, Category("ExtensionCheck")]
-        public void IfFilesWithGivenExtensionAvailable_FilesWithExtensionsPresent_CorrectFilesRetrieved()
-        {
-            Assert.True(listFilesWithExtensions.SequenceEqual<string>(DependencyManager.GetAllFilesWithGivenExtensions(existingSolutionDirectory, listAvailableExtensions)));
-        }
-
-        [Test, Category("ProjectFile")]
-        public void DeleteAllBuildFiles_AllBuildFilePresent_True()
-        {
-            DependencyManager.DeleteAllBuildProjectFiles(existingSolutionDirectory);
-
-            Assert.True(Directory.GetFiles(existingSolutionDirectory).Where(s => Path.GetFileName(s).Equals("ALL_BUILD.vcxproj")).Count() == 0 &&
-                        Directory.GetFiles(existingSolutionDirectory).Where(s => Path.GetFileName(s).Equals("ALL_BUILD.vcxproj.filters")).Count() == 0);
-        }
-
-        [Test, Category("ProjectFile")]
-        public void DeleteZeroCheckProjectFiles_ZeroCheckProjectFilesPresent_True()
-        {
-            DependencyManager.DeleteZeroCheckProjectFiles(existingSolutionDirectory);
-
-            Assert.True(Directory.GetFiles(existingSolutionDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj")).Count() == 0 &&
-                        Directory.GetFiles(existingSolutionDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj.filters")).Count() == 0);
-        }
-
-        [Test, Category("ProjectFile")]
-        public void DeleteZeroCheckProjectFiles_ZeroCheckProjectFilesNotPresent_()
-        {
-            DependencyManager.DeleteZeroCheckProjectFiles(existingSolutionDirectory);
-
-            Assert.True(Directory.GetFiles(existingSolutionDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj")).Count() == 0 &&
-                        Directory.GetFiles(existingSolutionDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj.filters")).Count() == 0);
         }
 
         [Test, Category("ProjectFile")]
@@ -195,3 +311,4 @@ namespace CmakeDependencyRemover.Test
         }
     }
 }
+*/

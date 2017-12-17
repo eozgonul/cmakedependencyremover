@@ -9,73 +9,18 @@ using System.IO;
 
 namespace CmakeDependencyRemover
 {
-    public class DependencyManager : IDependencyManager
+    public class DependencyManager
     {
-        public bool CheckIfSolutionDirectoryExists(string solutionDirectory)
+        public void DeleteProjectFiles(string directory)
         {
-            return Directory.Exists(solutionDirectory);
-        }
-
-        public bool CheckIsSolutionDirectoryEmpty(string solutionDirectory)
-        {
-            if(CheckIfSolutionDirectoryExists(solutionDirectory))
-            {
-                return !Directory.EnumerateFileSystemEntries(solutionDirectory).Any();
-            }
-            else
-            {
-                return true;
-            }
-        }
-
-        public List<string> GetAllFilesWithGivenExtensions(string solutionDirectory, List<string> listExtensions)
-        {
-            if(listExtensions == null || listExtensions.Count() == 0)
-            {
-                return null;
-            }
-            else if(CheckIsSolutionDirectoryEmpty(solutionDirectory))
-            {
-                return null;
-            }
-
-            return Directory.GetFiles(solutionDirectory, "*.*", SearchOption.AllDirectories).Where(s => listExtensions.Contains(Path.GetExtension(s))).ToList<string>();
-        }
-
-        private void DeleteAllFilesWithGivenName(string solutionDirectory, string fileName)
-        {
-            var listAllFilesWithGivenExtension = GetAllFilesWithGivenExtensions(solutionDirectory, new List<string> { Path.GetExtension(fileName) });
-
-            var listAllFilesWithGivenName = listAllFilesWithGivenExtension.Where(s => Path.GetFileName(s).Equals(fileName));
-
-            foreach(string fileNameToDelete in listAllFilesWithGivenName)
-            {
-                File.Delete(fileNameToDelete);
-            }
-        }
-
-        public void DeleteAllBuildProjectFiles(string solutionDirectory)
-        {
-            DeleteAllFilesWithGivenName(solutionDirectory, "ALL_BUILD.vcxproj");
-            DeleteAllFilesWithGivenName(solutionDirectory, "ALL_BUILD.vcxproj.filters");
-
-        }
-
-        public void DeleteZeroCheckProjectFiles(string solutionDirectory)
-        {
-            DeleteAllFilesWithGivenName(solutionDirectory, "ZERO_CHECK.vcxproj");
-            DeleteAllFilesWithGivenName(solutionDirectory, "ZERO_CHECK.vcxproj.filters");
-        }
-
-        public void DeleteCmakeSolutionFiles(string solutionDirectory)
-        {
-            DeleteAllBuildProjectFiles(solutionDirectory);
-            DeleteZeroCheckProjectFiles(solutionDirectory);
+            DirectoryManager.DeleteAllFilesWithName(directory, "ALL_BUILD");
+            DirectoryManager.DeleteAllFilesWithName(directory, "ZERO_CHECK");
         }
 
         public bool DetectAndRemoveAllBuildAndZeroCheckProjectsFromTheSolution(string solutionPath)
         {
-            var listSolutionFiles = GetAllFilesWithGivenExtensions(solutionPath, new List<string> { ".sln" });
+            /*
+            var listSolutionFiles = DirectoryManager.GetFilesWithGivenExtensions(solutionPath, new List<string> { ".sln" });
 
             if(listSolutionFiles == null)
             {
@@ -107,6 +52,9 @@ namespace CmakeDependencyRemover
             }
 
             return result;
+            */
+
+            return false;
         }
 
         public string DetectProjectUID(string fileContent, string projectName)
