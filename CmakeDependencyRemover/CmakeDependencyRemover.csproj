@@ -48,7 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="DependencyManager.cs" />
+    <Compile Include="SolutionFileManager.cs" />
     <Compile Include="DirectoryManager.cs" />
     <Compile Include="IDependencyManager.cs" />
     <Compile Include="Program.cs" />

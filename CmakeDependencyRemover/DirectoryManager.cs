@@ -11,41 +11,54 @@ namespace CmakeDependencyRemover
 {
     public static class DirectoryManager
     {
-        static public bool CheckIfDirectoryExists(string solutionDirectory)
+        static public bool CheckIfDirectoryExists(string directory)
         {
-            return Directory.Exists(solutionDirectory);
+            return Directory.Exists(directory);
         }
 
-        static public bool CheckIfDirectoryEmpty(string solutionDirectory)
+        static public bool CheckIfDirectoryEmpty(string directory)
         {
-            if (CheckIfDirectoryExists(solutionDirectory))
+            if (CheckIfDirectoryExists(directory))
             {
-                return !Directory.EnumerateFileSystemEntries(solutionDirectory).Any();
+                return !Directory.EnumerateFileSystemEntries(directory).Any();
             }
-            else
-            {
-                return true;
-            }
+
+            return true;
         }
 
-        static public List<string> GetAllFilesWithName(string solutionDirectory, string fileName)
+        static public List<string> GetAllFilesWithName(string directory, string fileName)
         {  
-            if(!CheckIfDirectoryEmpty(solutionDirectory))
+            if(!CheckIfDirectoryEmpty(directory))
             {
                 if(string.IsNullOrEmpty(fileName))
                 {
                     return null;
                 }
 
-                return Directory.GetFiles(solutionDirectory, fileName + ".*", SearchOption.AllDirectories).ToList();
+                return Directory.GetFiles(directory, fileName + ".*", SearchOption.AllDirectories).ToList();
             }
 
             return null;
         }
 
-        static public List<string> DeleteAllFilesWithName(string solutionDirectory, string fileName)
+        static public List<string> GetAllFilesWithExtension(string directory, string fileExtension)
         {
-            var allFilesWithGivenName = GetAllFilesWithName(solutionDirectory, fileName);
+            if(!CheckIfDirectoryEmpty(directory))
+            {
+                if(string.IsNullOrEmpty(fileExtension))
+                {
+                    return null;
+                }
+
+                return Directory.GetFiles(directory, "*.*", SearchOption.AllDirectories).Where(s => fileExtension.Contains(Path.GetExtension(s))).ToList<string>();
+            }
+
+            return null;
+        }
+
+        static public List<string> DeleteAllFilesWithName(string directory, string fileName)
+        {
+            var allFilesWithGivenName = GetAllFilesWithName(directory, fileName);
 
             if(allFilesWithGivenName == null || allFilesWithGivenName.Count == 0)
             {

@@ -18,9 +18,10 @@ namespace CmakeDependencyRemover.Test
         string emptyDirectory;
         List<string> filesAllBuild;
         List<string> filesZeroCheck;
+        List<string> filesSolution;
 
         [SetUp]
-        public void SetDirectories()
+        public void SetUp()
         {
             existingDirectory = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory)) + @"\resource\FileExtensionTest";
             nonExistingDirectory = existingDirectory + @"\nonexisting\directory";
@@ -30,12 +31,15 @@ namespace CmakeDependencyRemover.Test
             filesAllBuild = new List<string> { existingDirectory + @"\ALL_BUILD.vcxproj",
                                                existingDirectory + @"\ALL_BUILD.vcxproj.filters",
                                                existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj",
-                                               existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj.filters", };
+                                               existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj.filters"};
 
             filesZeroCheck = new List<string> { existingDirectory + @"\ZERO_CHECK.vcxproj",
                                                 existingDirectory + @"\ZERO_CHECK.vcxproj.filters",
                                                 existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj",
-                                                existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj.filters"};                                        
+                                                existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj.filters"};
+
+            filesSolution = new List<string> { existingDirectory + @"\Boggle.sln",
+                                               existingDirectory + @"\SomeInnerDirectory\Boggle.sln"};
         }
 
         [Test, Category("Directory")]
@@ -256,6 +260,62 @@ namespace CmakeDependencyRemover.Test
             Assert.True(filesZeroCheck.SequenceEqual(result) &&
                         Directory.GetFiles(existingDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj")).Count() == 0 &&
                         Directory.GetFiles(existingDirectory).Where(s => Path.GetFileName(s).Equals("ZERO_CHECK.vcxproj.filters")).Count() == 0);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryDoesNotExistExtensionNull_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(nonExistingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryDoesNotExistExtensionEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(nonExistingDirectory, "");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryDoesNotExistExtensionSet_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(nonExistingDirectory, ".sln");
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryExistsExtensionNull_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(existingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryExistsExtensionEmpty_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(existingDirectory, null);
+
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryExistsExtensionDoesNotExist_ReturnNull()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(existingDirectory, ".nonExistingExtension");
+
+            Assert.That(result, Is.Empty);
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithExtension_DirectoryExistsExtensionExists_Return()
+        {
+            var result = DirectoryManager.GetAllFilesWithExtension(existingDirectory, ".sln");
+
+            Assert.That(filesSolution.SequenceEqual(result), Is.True);
         }
     }
 }
