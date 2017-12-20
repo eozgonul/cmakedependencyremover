@@ -9,18 +9,72 @@ using System.IO;
 
 namespace CmakeDependencyRemover
 {
-    public class DependencyManager
+    public class SolutionFileManager
     {
-        public void DeleteProjectFiles(string directory)
+        static public string GetProjectUID(string fileContent, string projectName)
         {
-            DirectoryManager.DeleteAllFilesWithName(directory, "ALL_BUILD");
-            DirectoryManager.DeleteAllFilesWithName(directory, "ZERO_CHECK");
+            if(fileContent == null || projectName == null)
+            {
+                return null;
+            }
+
+            var regex = new Regex("(?<=\\\"" + projectName + "\\.vcxproj\\\"\\,\\s\\\"\\{)([A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12})");
+            var match = regex.Match(fileContent);
+
+            return string.IsNullOrEmpty(match.Value) ? null : match.Value;
+        }
+
+        static public string GetProjectInfo(string fileContent, string projectName)
+        {
+            if(string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(projectName))
+            {
+                return null;
+            }
+
+            var regularExpression = "\\bProject\\b\\(\"\\{([A-Z|0-9]+-*){5}\\}\"\\)\\s=\\s\"(\\b" + projectName + "\\b)\".*?\\bEndProject\\b";
+            var regex = new Regex(regularExpression, RegexOptions.Singleline);
+            var match = regex.Match(fileContent);
+
+            return string.IsNullOrEmpty(match.Value) ? null : match.Value;
+        }
+
+        static public void RemoveProjectInfoFromSolutionFile(string fileContent, string projectName)
+        {
+            
+
+            //fileContent = fileContent.Replace(match.Value, "");
+            //Console.WriteLine("Removed {projectName} info");
+            
+
+
+            
+
+            /*
+
+            if (string.IsNullOrEmpty(solutionPath) || string.IsNullOrEmpty(projectName))
+            {
+                return false;
+            }
+
+            var solutionFiles = DirectoryManager.GetAllFilesWithExtension(solutionPath, ".sln");
+
+            if(solutionFiles == null || !solutionFiles.Any())
+            {
+                return false;
+            }
+
+            foreach(var solutionFile in solutionFiles)
+            {
+
+            }
+
+           return false;
+           */
         }
 
         public bool DetectAndRemoveAllBuildAndZeroCheckProjectsFromTheSolution(string solutionPath)
         {
-            /*
-            var listSolutionFiles = DirectoryManager.GetFilesWithGivenExtensions(solutionPath, new List<string> { ".sln" });
+            var listSolutionFiles = DirectoryManager.GetAllFilesWithExtension(solutionPath, ".sln");
 
             if(listSolutionFiles == null)
             {
@@ -29,16 +83,14 @@ namespace CmakeDependencyRemover
 
             bool result = false;
 
-            foreach(string solutionFile in listSolutionFiles)
+            foreach(var solutionFile in listSolutionFiles)
             {
-                string fileContent;
-
                 // \bProject\b\(\"\{([A-Z|0-9]+-*){5}\}\"\)\s=\s\"(\bALL_BUILD\b|\bZERO_CHECK\b)\".*?\bEndProject\b
                 
                 string regularExpression = "\\bProject\\b\\(\"\\{([A-Z|0-9]+-*){5}\\}\"\\)\\s=\\s\"(\\bALL_BUILD\\b|\\bZERO_CHECK\\b)\".*?\\bEndProject\\b";
                 Regex regex = new Regex(regularExpression, RegexOptions.Singleline);
 
-                fileContent = File.ReadAllText(solutionFile);
+                var fileContent = File.ReadAllText(solutionFile);
                 var matches = regex.Matches(fileContent);
 
                 foreach(Match match in matches)
@@ -52,18 +104,6 @@ namespace CmakeDependencyRemover
             }
 
             return result;
-            */
-
-            return false;
-        }
-
-        public string DetectProjectUID(string fileContent, string projectName)
-        {
-            Regex regex = new Regex("(?<=\\\"" + projectName + "\\.vcxproj\\\"\\,\\s\\\"\\{)([A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12})");
-
-            var match = regex.Match(fileContent);
-
-            return match.Value;
         }
 
         public List<string> DetectSolutionConfigurations(string fileContent)
@@ -71,7 +111,6 @@ namespace CmakeDependencyRemover
             //(?<=GlobalSection\(SolutionConfigurationPlatforms\)\s\=\spreSolution\s)(\s*[A-z0-9]+\|[A-z0-9]+\s\=\s[A-z0-9]+\|[A-z0-9]+)+(?=\s*EndGlobalSection)
 
             var regexUnseparatedConfigList = new Regex("(?<=GlobalSection\\(SolutionConfigurationPlatforms\\)\\s\\=\\spreSolution\\s)(\\s*[A-z0-9]+\\|[A-z0-9]+\\s\\=\\s[A-z0-9]+\\|[A-z0-9]+)+(?=\\s*EndGlobalSection)"/*, RegexOptions.Singleline*/);
-
 
             var unseparatedConfig = regexUnseparatedConfigList.Match(fileContent);
 
