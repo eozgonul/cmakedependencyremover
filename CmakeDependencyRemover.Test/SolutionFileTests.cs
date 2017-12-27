@@ -54,14 +54,31 @@ namespace CmakeDependencyRemover.Test
 		}
 
 		[Category("UID")]
-		[TestCase(null, null, null)]
-		[TestCase("someStringWhichContainsNoUID", null, null)]
-		[TestCase(null, "someProjectName", null)]
-		[TestCase("someStringWhichContainsNoUID", "someProjectName", null)]
-		public void GetProjectUID_ParametersNullOrDoesNotExist_ReturnNull(string fileContent, string projectName, string expectedUID)
+		[TestCase(null, null)]
+		[TestCase("", null)]
+		[TestCase(null, "")]
+		[TestCase("someStringWhichContainsNoUID", null)]
+		[TestCase(null, "someProjectName")]
+		public void GetProjectUID_ParametersNull_ThrowArgumentNullException(string fileContent, string projectName)
 		{
-			var result = SolutionFileManager.GetProjectUID(null, null);
-			Assert.AreEqual(result, expectedUID);
+			Assert.Throws<ArgumentNullException>(() => SolutionFileManager.GetProjectUID(fileContent, projectName));
+		}
+
+		[Category("UID")]
+		[TestCase("", "")]
+		[TestCase("someStringWhichContainsNoUID", "")]
+		[TestCase("", "someProjectName")]
+		public void GetProjectUID_ParametersEmpty_ReturnNull(string fileContent, string projectName)
+		{
+			var result = SolutionFileManager.GetProjectUID("someStringWhichContainsNoUID", "someProjectName");
+			Assert.That(result, Is.Null);
+		}
+
+		[Test, Category("UID")]
+		public void GetProjectUID_ParametersDoesNotExist_ReturnNull()
+		{
+			var result = SolutionFileManager.GetProjectUID("someStringWhichContainsNoUID", "someProjectName");
+			Assert.That(result, Is.Null);
 		}
 
 		[Test, Category("UID")]
@@ -79,14 +96,22 @@ namespace CmakeDependencyRemover.Test
 		}
 
 		[Category("ProjectInfo")]
-		[TestCase(null, null, null)]
-		[TestCase("", null, null)]
-		[TestCase(null, "", null)]
+		[TestCase(null, null)]
+		[TestCase("", null)]
+		[TestCase(null, "")]
+		[TestCase("someStringWhichContainsNoProjectInfo", null)]
+		[TestCase(null, "someProjectName")]
+		public void GetProjectInfo_ParametersNull_ThrowArgumentNullException(string fileContent, string projectName)
+		{
+			Assert.Throws<ArgumentNullException>(() => SolutionFileManager.GetProjectInfo(fileContent, projectName));
+		}
+
+		[Category("ProjectInfo")]
 		[TestCase("", "", null)]
 		[TestCase("someStringWhichContainsNoProjectInfo", "", null)]
 		[TestCase("", "someProjectName", null)]
 		[TestCase("someStringWhichContainsNoProjectInfo", "someProjectName", null)]
-		public void GetProjectInfo_ParametersNullEmptyOrDoesNotExist_ReturnNull(string fileContent, string projectName, string expected)
+		public void GetProjectInfo_ParametersEmptyOrDoesNotExist_ReturnNull(string fileContent, string projectName, string expected)
 		{
 			var result = SolutionFileManager.GetProjectInfo(fileContent, projectName);
 			Assert.AreEqual(result, expected);

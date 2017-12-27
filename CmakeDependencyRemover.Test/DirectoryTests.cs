@@ -59,6 +59,12 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Directory")]
+        public void CheckIfDirectoryExists_DirectoryNull_ThrowArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.CheckIfDirectoryExists(null));
+        }
+
+        [Test, Category("Directory")]
         public void CheckIfDirectoryEmpty_DirectoryNotEmpty_ReturnTrue()
         {
             var result = DirectoryManager.CheckIfDirectoryEmpty(existingDirectory);
@@ -82,16 +88,20 @@ namespace CmakeDependencyRemover.Test
             Assert.That(result, Is.True);
         }
 
-        [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryDoesNotExistFileNameNull_ReturnNull()
+        [Test, Category("Directory")]
+        public void CheckIfDirectoryEmpty_DirectoryNull_ThrowArgumentNullException()
         {
-            var result = DirectoryManager.GetAllFilesWithName(nonExistingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.CheckIfDirectoryEmpty(null));
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryDoesNotExistFileNameEmpty_ReturnNull()
+        public void GetAllFilesWithName_DirectoryDoesNotExistFileNameNull_ThrowArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithName(nonExistingDirectory, null));
+        }
+
+        [Test, Category("Files")]
+        public void GetAllFilesWithName_DirectoryDoesNotExistFileNameEmpty_ReturnNull()
         {
             var result = DirectoryManager.GetAllFilesWithName(nonExistingDirectory, "");
 
@@ -99,7 +109,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryDoesNotExistFileNameSet_ReturnNull()
+        public void GetAllFilesWithName_DirectoryDoesNotExistFileNameSet_ReturnNull()
         {
             var result = DirectoryManager.GetAllFilesWithName(nonExistingDirectory, "someFileName");
 
@@ -107,23 +117,19 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryEmptyFileNameNull_ReturnNull()
+        public void GetAllFilesWithName_DirectoryEmptyFileNameNull_ThrowsArgumentNullException()
         {
-            var result = DirectoryManager.GetAllFilesWithName(emptyDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithName(emptyDirectory, null));
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameNull_ReturnNull()
+        public void GetAllFilesWithName_DirectoryNonEmptyFileNameNull_ThrowArgumentNullException()
         {
-            var result = DirectoryManager.GetAllFilesWithName(existingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithName(existingDirectory, null));
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryEmptyFileNameEmpty_ReturnNull()
+        public void GetAllFilesWithName_DirectoryEmptyFileNameEmpty_ReturnNull()
         {
             var result = DirectoryManager.GetAllFilesWithName(emptyDirectory, "");
 
@@ -131,7 +137,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameEmpty_ReturnNull()
+        public void GetAllFilesWithName_DirectoryNonEmptyFileNameEmpty_ReturnNull()
         {
             var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "");
 
@@ -139,7 +145,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryEmptyFileNameSet_ReturnNull()
+        public void GetAllFilesWithName_DirectoryEmptyFileNameSet_ReturnNull()
         {
             var result = DirectoryManager.GetAllFilesWithName(emptyDirectory, "ALL_BUILD");
 
@@ -147,7 +153,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameAllBuild_ReturnAllBuildFiles()
+        public void GetAllFilesWithName_DirectoryNonEmptyFileNameAllBuild_ReturnAllBuildFiles()
         {
             var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "ALL_BUILD");
 
@@ -155,7 +161,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameZeroCheck_ReturnZeroCheckFiles()
+        public void GetAllFilesWithName_DirectoryNonEmptyFileNameZeroCheck_ReturnZeroCheckFiles()
         {
             var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "ZERO_CHECK");
 
@@ -163,31 +169,37 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithGivenName_DirectoryNonEmptyFileNameDoesNotExist_ReturnEmpty()
+        public void GetAllFilesWithName_DirectoryNonEmptyFileNameDoesNotExist_ReturnEmpty()
         {
             var result = DirectoryManager.GetAllFilesWithName(existingDirectory, "NonExistingFileName");
 
             Assert.That(result, Is.Empty);
         }
 
-        [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryDoesNotExistFileNameNull_ReturnNull()
+        [Category("Files")]
+        [TestCase(null, "")]
+        [TestCase("", null)]
+        [TestCase("someDirectory", null)]
+        [TestCase(null, "someFileName")]
+        public void GetAllFilesWithName_ParametersNull_ThrowArgumentNullException(string directory, string fileName)
         {
-            var result = DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithName(directory, fileName));
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryDoesNotExistFileNameEmpty_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryDoesNotExistFileNameNull_ThrowArgumentNulLException()
         {
-            var result = DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, null));
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryDoesNotExistFileNameSet_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryDoesNotExistFileNameEmpty_ThrowArgumentNullException()
+        {
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, null));
+        }
+
+        [Test, Category("DeleteFiles")]
+        public void DeleteAllFilesWithName_DirectoryDoesNotExistFileNameSet_ReturnNull()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(nonExistingDirectory, "ALL_BUILD");
 
@@ -195,15 +207,13 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryEmptyFileNameNull_ReturnNull()
+        public void DeleteAllFilesWitName_DirectoryEmptyFileNameNull_ThrowNullArgumentException()
         {
-            var result = DirectoryManager.DeleteAllFilesWithName(emptyDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.DeleteAllFilesWithName(emptyDirectory, null));
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryEmptyFileNameEmpty_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryEmptyFileNameEmpty_ReturnNull()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(emptyDirectory, "");
 
@@ -211,7 +221,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryEmptyFileNameSet_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryEmptyFileNameSet_ReturnNull()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(emptyDirectory, "ALL_BUILD");
 
@@ -219,15 +229,13 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameNull_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryNonEmptyFileNameNull_ThrowNullArgumentException()
         {
-            var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.DeleteAllFilesWithName(existingDirectory, null));
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameEmpty_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryNonEmptyFileNameEmpty_ReturnNull()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "");
 
@@ -235,7 +243,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameDoesNotExist_ReturnNull()
+        public void DeleteAllFilesWithName_DirectoryNonEmptyFileNameDoesNotExist_ReturnNull()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "someFileName");
 
@@ -243,7 +251,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameAllBuild_ReturnListOfDeletedAllBuildFiles()
+        public void DeleteAllFilesWithName_DirectoryNonEmptyFileNameAllBuild_ReturnListOfDeletedAllBuildFiles()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "ALL_BUILD");
 
@@ -253,7 +261,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("DeleteFiles")]
-        public void DeleteAllFilesWithGivenName_DirectoryNonEmptyFileNameZeroCheck_ReturnListOfDeletedZeroCheckFiles()
+        public void DeleteAllFilesWithName_DirectoryNonEmptyFileNameZeroCheck_ReturnListOfDeletedZeroCheckFiles()
         {
             var result = DirectoryManager.DeleteAllFilesWithName(existingDirectory, "ZERO_CHECK");
 
@@ -263,11 +271,9 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithExtension_DirectoryDoesNotExistExtensionNull_ReturnNull()
+        public void GetAllFilesWithExtension_DirectoryDoesNotExistExtensionNull_ThrowArgumentNullException()
         {
-            var result = DirectoryManager.GetAllFilesWithExtension(nonExistingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithExtension(nonExistingDirectory, null));
         }
 
         [Test, Category("Files")]
@@ -287,19 +293,15 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithExtension_DirectoryExistsExtensionNull_ReturnNull()
+        public void GetAllFilesWithExtension_DirectoryExistsExtensionNull_ThrowArgumentNullException()
         {
-            var result = DirectoryManager.GetAllFilesWithExtension(existingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithExtension(existingDirectory, null));
         }
 
         [Test, Category("Files")]
-        public void GetAllFilesWithExtension_DirectoryExistsExtensionEmpty_ReturnNull()
+        public void GetAllFilesWithExtension_DirectoryExistsExtensionEmpty_ThrowArgumentNullException()
         {
-            var result = DirectoryManager.GetAllFilesWithExtension(existingDirectory, null);
-
-            Assert.That(result, Is.Null);
+            Assert.Throws<ArgumentNullException>(() => DirectoryManager.GetAllFilesWithExtension(existingDirectory, null));
         }
 
         [Test, Category("Files")]

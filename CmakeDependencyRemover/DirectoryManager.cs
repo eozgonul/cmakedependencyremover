@@ -13,11 +13,21 @@ namespace CmakeDependencyRemover
     {
         static public bool CheckIfDirectoryExists(string directory)
         {
+            if(directory == null)
+            {
+                throw new ArgumentNullException("CheckIfDirectoryExists called with null reference");
+            }
+
             return Directory.Exists(directory);
         }
 
         static public bool CheckIfDirectoryEmpty(string directory)
         {
+            if(directory == null)
+            {
+                throw new ArgumentNullException("CheckIfDirectoryEmpty called with null reference");
+            }
+
             if (CheckIfDirectoryExists(directory))
             {
                 return !Directory.EnumerateFileSystemEntries(directory).Any();
@@ -28,6 +38,11 @@ namespace CmakeDependencyRemover
 
         static public List<string> GetAllFilesWithName(string directory, string fileName)
         {  
+            if(directory == null || fileName == null)
+            {
+                throw new ArgumentNullException("GetAllFilesWithName called with null reference(s)");
+            }
+
             if(!CheckIfDirectoryEmpty(directory))
             {
                 if(string.IsNullOrEmpty(fileName))
@@ -43,6 +58,11 @@ namespace CmakeDependencyRemover
 
         static public List<string> GetAllFilesWithExtension(string directory, string fileExtension)
         {
+            if(directory == null || fileExtension == null)
+            {
+                throw new ArgumentNullException("GetAllFilesWithExtension called null reference(s)");
+            }
+
             if(!CheckIfDirectoryEmpty(directory))
             {
                 if(string.IsNullOrEmpty(fileExtension))
@@ -58,6 +78,11 @@ namespace CmakeDependencyRemover
 
         static public List<string> DeleteAllFilesWithName(string directory, string fileName)
         {
+            if(directory == null || fileName == null)
+            {
+                throw new ArgumentNullException("DeleteAllFilesWithName called with null reference(s)");
+            }
+
             var allFilesWithGivenName = GetAllFilesWithName(directory, fileName);
 
             if(allFilesWithGivenName == null || allFilesWithGivenName.Count == 0)

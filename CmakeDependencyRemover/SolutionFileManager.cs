@@ -15,7 +15,7 @@ namespace CmakeDependencyRemover
         {
             if(fileContent == null || projectName == null)
             {
-                return null;
+                throw new ArgumentNullException("GetProjectUID called with null reference(s)");
             }
 
             var regex = new Regex("(?<=\\\"" + projectName + "\\.vcxproj\\\"\\,\\s\\\"\\{)([A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12})");
@@ -26,9 +26,9 @@ namespace CmakeDependencyRemover
 
         static public string GetProjectInfo(string fileContent, string projectName)
         {
-            if(string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(projectName))
+            if(fileContent == null || projectName == null)
             {
-                return null;
+                throw new ArgumentNullException("GetProjectInfo called with null reference(s)");
             }
 
             var regularExpression = "\\bProject\\b\\(\"\\{([A-Z|0-9]+-*){5}\\}\"\\)\\s=\\s\"(\\b" + projectName + "\\b)\".*?\\bEndProject\\b";
