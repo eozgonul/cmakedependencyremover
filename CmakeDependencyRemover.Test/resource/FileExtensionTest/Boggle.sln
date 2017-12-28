@@ -1,0 +1,50 @@
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ALL_BUILD", "ALL_BUILD.vcxproj", "{8BAE2EF6-B67E-3634-9B27-B99536808058}"
+	ProjectSection(ProjectDependencies) = postProject
+		{07CB081B-DCB7-31FC-8BF9-0CD05B752220} = {07CB081B-DCB7-31FC-8BF9-0CD05B752220}
+		{B4AEEABC-FA41-3892-8644-533F537A0ED7} = {B4AEEABC-FA41-3892-8644-533F537A0ED7}
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192} = {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BoggleLibrary", "boggle_library\BoggleLibrary.vcxproj", "{07CB081B-DCB7-31FC-8BF9-0CD05B752220}"
+	ProjectSection(ProjectDependencies) = postProject
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192} = {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "BoggleTest", "boggle_test\BoggleTest.vcxproj", "{B4AEEABC-FA41-3892-8644-533F537A0ED7}"
+	ProjectSection(ProjectDependencies) = postProject
+		{07CB081B-DCB7-31FC-8BF9-0CD05B752220} = {07CB081B-DCB7-31FC-8BF9-0CD05B752220}
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192} = {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}
+	EndProjectSection
+EndProject
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "ZERO_CHECK", "ZERO_CHECK.vcxproj", "{B28D5454-5C92-348F-BB2D-BB0B9FAE4192}"
+	ProjectSection(ProjectDependencies) = postProject
+	EndProjectSection
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Release|x64 = Release|x64
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{8BAE2EF6-B67E-3634-9B27-B99536808058}.Debug|x64.ActiveCfg = Debug|x64
+		{8BAE2EF6-B67E-3634-9B27-B99536808058}.Release|x64.ActiveCfg = Release|x64
+		{07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Debug|x64.ActiveCfg = Debug|x64
+		{07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Debug|x64.Build.0 = Debug|x64
+		{07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Release|x64.ActiveCfg = Release|x64
+		{07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Release|x64.Build.0 = Release|x64
+		{B4AEEABC-FA41-3892-8644-533F537A0ED7}.Debug|x64.ActiveCfg = Debug|x64
+		{B4AEEABC-FA41-3892-8644-533F537A0ED7}.Debug|x64.Build.0 = Debug|x64
+		{B4AEEABC-FA41-3892-8644-533F537A0ED7}.Release|x64.ActiveCfg = Release|x64
+		{B4AEEABC-FA41-3892-8644-533F537A0ED7}.Release|x64.Build.0 = Release|x64
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Debug|x64.ActiveCfg = Debug|x64
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Debug|x64.Build.0 = Debug|x64
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Release|x64.ActiveCfg = Release|x64
+		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Release|x64.Build.0 = Release|x64
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+	EndGlobalSection
+	GlobalSection(ExtensibilityAddIns) = postSolution
+	EndGlobalSection
+EndGlobal

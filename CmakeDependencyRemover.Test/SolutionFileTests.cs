@@ -14,6 +14,7 @@ namespace CmakeDependencyRemover.Test
 	{
 		string UIDInfoAllBuild;
 		string projectInfoAllBuild;
+		string solutionFileContent;
 
 		[SetUp]
 		public void SetUp()
@@ -50,6 +51,59 @@ namespace CmakeDependencyRemover.Test
 								  "     ProjectSection(ProjectDependencies) = postProject\n" +
 								  "     EndProjectSection\n" +
 								  "EndProject\n";
+
+
+			solutionFileContent =   "Microsoft Visual Studio Solution File, Format Version 12.00\n" +
+									"# Visual Studio 15\n" +
+									"Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"ALL_BUILD\", \"ALL_BUILD.vcxproj\", \"{8BAE2EF6-B67E-3634-9B27-B99536808058}\"\n" +
+									"   ProjectSection(ProjectDependencies) = postProject\n" +
+									"		{07CB081B-DCB7-31FC-8BF9-0CD05B752220} = {07CB081B-DCB7-31FC-8BF9-0CD05B752220}\n" +
+									"		{B4AEEABC-FA41-3892-8644-533F537A0ED7} = {B4AEEABC-FA41-3892-8644-533F537A0ED7}\n" +
+									"		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192} = {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}\n" +
+									"	EndProjectSection\n" +
+									"EndProject\n" +
+									"Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"BoggleLibrary\", \"boggle_library\\BoggleLibrary.vcxproj\", \"{07CB081B-DCB7-31FC-8BF9-0CD05B752220}\"\n" +
+									"	ProjectSection(ProjectDependencies) = postProject\n" +
+									"		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192} = {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}\n" +
+									"	EndProjectSection\n" +
+									"EndProject\n" +
+									"Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"BoggleTest\", \"boggle_test\\BoggleTest.vcxproj\", \"{B4AEEABC-FA41-3892-8644-533F537A0ED7}\"\n" +
+									"	ProjectSection(ProjectDependencies) = postProject\n" +
+									"		{07CB081B-DCB7-31FC-8BF9-0CD05B752220} = {07CB081B-DCB7-31FC-8BF9-0CD05B752220}\n" +
+									"		{B28D5454-5C92-348F-BB2D-BB0B9FAE4192} = {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}\n" +
+									"	EndProjectSection\n" +
+									"EndProject\n" +
+									"Project(\"{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}\") = \"ZERO_CHECK\", \"ZERO_CHECK.vcxproj\", \"{B28D5454-5C92-348F-BB2D-BB0B9FAE4192}\"\n" +
+									"	ProjectSection(ProjectDependencies) = postProject\n" +
+									"	EndProjectSection\n" +
+									"EndProject\n" +
+									"Global\n" +
+									"   GlobalSection(SolutionConfigurationPlatforms) = preSolution\n" +
+									"       Debug|x64 = Debug|x64\n" +
+									"       Release|x64 = Release|x64\n" +
+									"   EndGlobalSection\n" +
+									"   GlobalSection(ProjectConfigurationPlatforms) = postSolution\n" +
+									"       {8BAE2EF6-B67E-3634-9B27-B99536808058}.Debug|x64.ActiveCfg = Debug|x64\n" +
+									"       {8BAE2EF6-B67E-3634-9B27-B99536808058}.Release|x64.ActiveCfg = Release|x64\n" +
+									"       {07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Debug|x64.ActiveCfg = Debug|x64\n" +
+									"       {07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Debug|x64.Build.0 = Debug|x64\n" +
+									"       {07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Release|x64.ActiveCfg = Release|x64\n" +
+									"       {07CB081B-DCB7-31FC-8BF9-0CD05B752220}.Release|x64.Build.0 = Release|x64\n" +
+									"       {B4AEEABC-FA41-3892-8644-533F537A0ED7}.Debug|x64.ActiveCfg = Debug|x64\n" +
+									"       {B4AEEABC-FA41-3892-8644-533F537A0ED7}.Debug|x64.Build.0 = Debug|x64\n" +
+									"       {B4AEEABC-FA41-3892-8644-533F537A0ED7}.Release|x64.ActiveCfg = Release|x64\n" +
+									"       {B4AEEABC-FA41-3892-8644-533F537A0ED7}.Release|x64.Build.0 = Release|x64\n" +
+									"       {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Debug|x64.ActiveCfg = Debug|x64\n" +
+									"       {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Debug|x64.Build.0 = Debug|x64\n" +
+									"       {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Release|x64.ActiveCfg = Release|x64\n" +
+									"       {B28D5454-5C92-348F-BB2D-BB0B9FAE4192}.Release|x64.Build.0 = Release|x64\n" +
+									"	EndGlobalSection\n" +
+									"	GlobalSection(ExtensibilityGlobals) = postSolution\n" +
+									"	EndGlobalSection\n" +
+									"	GlobalSection(ExtensibilityAddIns) = postSolution\n" +
+									"	EndGlobalSection\n" +
+									"EndGlobal\n";
+
 
 		}
 
@@ -129,6 +183,58 @@ namespace CmakeDependencyRemover.Test
 		{
 			var result = SolutionFileManager.GetProjectInfo(projectInfoAllBuild, "ALL_BUIL");
 			Assert.That(result, Is.Null);
+		}
+
+		[Category("RemoveProjectInfo")]
+		[TestCase(null, null)]
+		[TestCase(null, "")]
+		[TestCase(null, "someProjectName")]
+		[TestCase("", null)]
+		[TestCase("someFileContentWithNoValidProjectInfo", null)]
+		public void RemoveProjectInfoFromSolutionFile_ParametersNull_ThrowArgumentNullException(string fileContent, string fileName)
+		{
+			Assert.Throws<ArgumentNullException>(() => SolutionFileManager.RemoveProjectInfoFromSolutionFile(fileContent, fileName));
+		}
+
+		[Test, Category("RemoveProjectInfo")]
+		public void RemoveProjectInfoFromSolutionFile_FileContentEmptyProjectNameInvalid_ReturnFalse()
+		{
+			var result = SolutionFileManager.RemoveProjectInfoFromSolutionFile("", "someProjectName");
+			Assert.That(result, Is.False);
+		}
+
+		[Test, Category("RemoveProjectInfo")]
+		public void RemoveProjectInfoFromSolutionFile_FileContentEmptyProjectNameValid_ReturnFalse()
+		{
+			var result = SolutionFileManager.RemoveProjectInfoFromSolutionFile("", "ALL_BUILD");
+			Assert.That(result, Is.False);
+		}
+
+		[Test, Category("RemoveProjectInfo")]
+		public void RemoveProjectInfoFromSolutionFile_FileContentValidProjectNameNull_ThrowArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => SolutionFileManager.RemoveProjectInfoFromSolutionFile(solutionFileContent, null));
+		}
+
+		[Test, Category("RemoveProjectInfo")]
+		public void RemoveProjectInfoFromSolutionFile_FileContentValidProjectNameEmpty_ThrowArgumentNullException()
+		{
+			var result = SolutionFileManager.RemoveProjectInfoFromSolutionFile(solutionFileContent, "");
+			Assert.That(result, Is.False);
+		}
+
+		[Test, Category("RemoveProjectInfo")]
+		public void RemoveProjectInfoFromSolutionFile_FileContentValidProjectNameInvalid_ThrowArgumentNullException()
+		{
+			var result = SolutionFileManager.RemoveProjectInfoFromSolutionFile(solutionFileContent, "someProjectName");
+			Assert.That(result, Is.False);
+		}
+
+		[Test, Category("RemoveProjectInfo")]
+		public void RemoveProjectInfoFromSolutionFile_FileContentValidProjectNameValid_ReturnTrue()
+		{
+			var result = SolutionFileManager.RemoveProjectInfoFromSolutionFile(solutionFileContent, "ALL_BUILD");
+			Assert.That(result, Is.True);
 		}
 	}
 }

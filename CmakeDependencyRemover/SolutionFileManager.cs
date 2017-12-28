@@ -38,38 +38,23 @@ namespace CmakeDependencyRemover
             return string.IsNullOrEmpty(match.Value) ? null : match.Value;
         }
 
-        static public void RemoveProjectInfoFromSolutionFile(string fileContent, string projectName)
+        static public bool RemoveProjectInfoFromSolutionFile(string fileContent, string projectName)
         {
-            
+            if(fileContent == null || projectName == null)
+            {
+                throw new ArgumentNullException("RemoveProjectInfoFromSolutionFile called with null reference(s)");
+            }
 
-            //fileContent = fileContent.Replace(match.Value, "");
-            //Console.WriteLine("Removed {projectName} info");
-            
+            var projectInfo = GetProjectInfo(fileContent, projectName);
 
-
-            
-
-            /*
-
-            if (string.IsNullOrEmpty(solutionPath) || string.IsNullOrEmpty(projectName))
+            if(string.IsNullOrEmpty(projectInfo))
             {
                 return false;
             }
 
-            var solutionFiles = DirectoryManager.GetAllFilesWithExtension(solutionPath, ".sln");
+            fileContent = fileContent.Replace(projectInfo, "");
 
-            if(solutionFiles == null || !solutionFiles.Any())
-            {
-                return false;
-            }
-
-            foreach(var solutionFile in solutionFiles)
-            {
-
-            }
-
-           return false;
-           */
+            return !fileContent.Contains(projectInfo);
         }
 
         public bool DetectAndRemoveAllBuildAndZeroCheckProjectsFromTheSolution(string solutionPath)
