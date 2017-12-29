@@ -15,6 +15,7 @@ namespace CmakeDependencyRemover.Test
 		string UIDInfoAllBuild;
 		string projectInfoAllBuild;
 		string solutionFileContent;
+		List<string> solutionConfigurations;
 
 		[SetUp]
 		public void SetUp()
@@ -103,6 +104,8 @@ namespace CmakeDependencyRemover.Test
 									"	GlobalSection(ExtensibilityAddIns) = postSolution\n" +
 									"	EndGlobalSection\n" +
 									"EndGlobal\n";
+
+			solutionConfigurations = new List<string> { "Debug|x64", "Release|x64" };
 
 
 		}
@@ -235,6 +238,28 @@ namespace CmakeDependencyRemover.Test
 		{
 			var result = SolutionFileManager.RemoveProjectInfoFromSolutionFile(solutionFileContent, "ALL_BUILD");
 			Assert.That(result, Is.True);
+		}
+
+		[Test, Category("GetSolutionConfigurations")]
+		public void GetSolutionConfigurations_ParameterNull_ThrowArgumentNullException()
+		{
+			Assert.Throws<ArgumentNullException>(() => SolutionFileManager.GetSolutionConfigurations(null));
+		}
+
+		[Category("GetSolutionConfigurations")]
+		[TestCase("")]
+		[TestCase("someFileContentWithNoSolutionInformation")]
+		public void GetSolutionConfigurations_ParametersEmptyOrInvalid_ReturnNull(string fileContent)
+		{
+			var result = SolutionFileManager.GetSolutionConfigurations(fileContent);
+			Assert.That(result, Is.Null);
+		}
+
+		[Test, Category("GetSolutionConfigurations")]
+		public void GetSolutionConfigurations_FileContentValid_ReturnDebugRelease()
+		{
+			var result = SolutionFileManager.GetSolutionConfigurations(solutionFileContent);
+			Assert.That(solutionConfigurations.SequenceEqual(result));
 		}
 	}
 }

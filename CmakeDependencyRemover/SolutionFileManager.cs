@@ -31,6 +31,9 @@ namespace CmakeDependencyRemover
                 throw new ArgumentNullException("GetProjectInfo called with null reference(s)");
             }
 
+            // Regular expression without escape characters
+            // \bProject\b\(\"\{([A-Z|0-9]+-*){5}\}\"\)\s=\s\"(\bALL_BUILD\b|\bZERO_CHECK\b)\".*?\bEndProject\b
+
             var regularExpression = "\\bProject\\b\\(\"\\{([A-Z|0-9]+-*){5}\\}\"\\)\\s=\\s\"(\\b" + projectName + "\\b)\".*?\\bEndProject\\b";
             var regex = new Regex(regularExpression, RegexOptions.Singleline);
             var match = regex.Match(fileContent);
@@ -57,7 +60,7 @@ namespace CmakeDependencyRemover
             return !fileContent.Contains(projectInfo);
         }
 
-        public bool DetectAndRemoveAllBuildAndZeroCheckProjectsFromTheSolution(string solutionPath)
+        public bool RemoveAllBuildAndZeroCheckProjectsFromTheSolution(string solutionPath)
         {
             var listSolutionFiles = DirectoryManager.GetAllFilesWithExtension(solutionPath, ".sln");
 
@@ -69,9 +72,7 @@ namespace CmakeDependencyRemover
             bool result = false;
 
             foreach(var solutionFile in listSolutionFiles)
-            {
-                // \bProject\b\(\"\{([A-Z|0-9]+-*){5}\}\"\)\s=\s\"(\bALL_BUILD\b|\bZERO_CHECK\b)\".*?\bEndProject\b
-                
+            { 
                 string regularExpression = "\\bProject\\b\\(\"\\{([A-Z|0-9]+-*){5}\\}\"\\)\\s=\\s\"(\\bALL_BUILD\\b|\\bZERO_CHECK\\b)\".*?\\bEndProject\\b";
                 Regex regex = new Regex(regularExpression, RegexOptions.Singleline);
 
@@ -91,33 +92,38 @@ namespace CmakeDependencyRemover
             return result;
         }
 
-        public List<string> DetectSolutionConfigurations(string fileContent)
+        static public List<string> GetSolutionConfigurations(string fileContent)
         {
+            if(fileContent == null)
+            {
+                throw new ArgumentNullException("GetSolutionConfigurations called with null reference");
+            }
+            // Regular expression without escape characters
             //(?<=GlobalSection\(SolutionConfigurationPlatforms\)\s\=\spreSolution\s)(\s*[A-z0-9]+\|[A-z0-9]+\s\=\s[A-z0-9]+\|[A-z0-9]+)+(?=\s*EndGlobalSection)
-
-            var regexUnseparatedConfigList = new Regex("(?<=GlobalSection\\(SolutionConfigurationPlatforms\\)\\s\\=\\spreSolution\\s)(\\s*[A-z0-9]+\\|[A-z0-9]+\\s\\=\\s[A-z0-9]+\\|[A-z0-9]+)+(?=\\s*EndGlobalSection)"/*, RegexOptions.Singleline*/);
-
+            var regexUnseparatedConfigString = "(?<=GlobalSection\\(SolutionConfigurationPlatforms\\)\\s\\=\\spreSolution\\s)(\\s*[A-z0-9]+\\|[A-z0-9]+\\s\\=\\s[A-z0-9]+\\|[A-z0-9]+)+(?=\\s*EndGlobalSection)";
+            var regexUnseparatedConfigList = new Regex(regexUnseparatedConfigString/*, RegexOptions.Singleline*/);
             var unseparatedConfig = regexUnseparatedConfigList.Match(fileContent);
 
-            if(unseparatedConfig.Success)
+            if(!unseparatedConfig.Success)
+            {
+                return null;
+            }
+            else
             {
                 Regex regexConfigs = new Regex("([A-z0-9]+\\|[A-z0-9]+)(?=\\s*\\=\\s[A-z0-9]+\\|[A-z0-9]+)", RegexOptions.Singleline);
                 var matchesConfigs = regexConfigs.Matches(unseparatedConfig.Value);
 
-                if(matchesConfigs.Count != 0)
+                if(matchesConfigs.Count == 0)
                 {
-                    var listConfigs = new List<string>();
-
-                    foreach(Match match in matchesConfigs)
-                    {
-                        listConfigs.Add(match.Value);
-                    }
-
-                    return listConfigs;
+                    return null;
                 }
-            }
-
-            return null;
+                else
+                {
+                    return matchesConfigs.Cast<Match>()
+                                         .Select(m => m.Value)
+                                         .ToList();
+                }
+            }            
         }
 
         public bool RemoveProjectUIDFromGlobalSettings(string fileContent, string uid)
