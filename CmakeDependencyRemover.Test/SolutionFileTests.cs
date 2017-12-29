@@ -261,5 +261,42 @@ namespace CmakeDependencyRemover.Test
 			var result = SolutionFileManager.GetSolutionConfigurations(solutionFileContent);
 			Assert.That(solutionConfigurations.SequenceEqual(result));
 		}
-	}
+
+		[Category("RemoveProjectUIDFromConfigurationPlatforms")]
+        [TestCase(null, null)]
+        [TestCase(null, "")]
+        [TestCase("", null)]
+        public void GetSolutionConfigurations_ParametersNull_ThrowArgumentNullException(string fileContent, string uid)
+        {
+            Assert.Throws<ArgumentNullException>(() => SolutionFileManager.RemoveProjectInfoFromSolutionFile(fileContent, uid));
+        }
+
+        [Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
+        public void GetSolutionConfigurations_FileContentEmptyUIDEmpty_ReturnFalse()
+        {
+            var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms("", "");
+            Assert.That(result, Is.False);
+        }
+
+        [Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
+        public void GetSolutionConfigurations_FileContentValidUIDEmpty_ReturnFalse()
+        {
+            var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "");
+            Assert.That(result, Is.False);
+        }
+
+        [Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
+        public void GetSolutionConfigurations_FileContentValidUIDInvalid_ReturnFalse()
+        {
+            var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "someInvalidUID");
+            Assert.That(result, Is.False);
+        }
+
+        [Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
+        public void GetSolutionConfigurations_FileContentValidUIDValid_ReturnTrue()
+        {
+            var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "8BAE2EF6-B67E-3634-9B27-B99536808058");
+            Assert.That(result, Is.True);
+        }
+    }
 }

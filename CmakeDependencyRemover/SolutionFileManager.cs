@@ -126,9 +126,50 @@ namespace CmakeDependencyRemover
             }            
         }
 
-        public bool RemoveProjectUIDFromGlobalSettings(string fileContent, string uid)
+        static public bool RemoveProjectUIDFromProjectConfigurationPlatforms(string fileContent, string uid)
         {
-            return false;
+            if(fileContent == null || uid == null)
+            {
+                throw new ArgumentNullException("RemoveProjectUIDFromGlobalSettings called with null reference(s)");
+            }
+
+            var configs = GetSolutionConfigurations(fileContent);
+
+            if(configs == null || configs.Count == 0)
+            {
+                return false;
+            }
+
+            bool result = false;
+
+            foreach(var config in configs)
+            {
+                // Regex without escape characters
+                //\{([A-Z|0-9]{8}-([A-Z|0-9]{4}-){3}[A-Z|0-9]{12})\}\.((Debug\|x64)|(Release\|x64))\.((ActiveCfg)|(Build\.0)) = ((Debug\|x64)|(Release\|x64))
+                
+                var configEscaped = config.Replace("|", @"\|");
+                var regexConfigurationPlatformsString = @"\{(" + uid + @")\}\." + @configEscaped + @"\.((ActiveCfg)|(Build\.0)) = (" + @configEscaped + @")";
+
+                var regexConfigurationPlatforms = new Regex(regexConfigurationPlatformsString, RegexOptions.Singleline);
+
+                var matchesConfigs = regexConfigurationPlatforms.Matches(fileContent);
+
+                if(matchesConfigs.Count == 0)
+                {
+                    continue;
+                }
+                else
+                {
+                    foreach(Match match in matchesConfigs)
+                    {
+                        fileContent = fileContent.Replace(match.Value, "");
+                    }
+
+                    result = true;
+                }
+            }
+
+            return result;
         }
     }
 }
