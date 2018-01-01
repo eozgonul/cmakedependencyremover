@@ -23,7 +23,7 @@ namespace CmakeDependencyRemover.Test
         [SetUp]
         public void SetUp()
         {
-            existingDirectory = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory)) + @"\resource\FileExtensionTest";
+            existingDirectory = Path.GetDirectoryName(Path.GetDirectoryName(TestContext.CurrentContext.TestDirectory)) + @"\resource\TestFiles";
             nonExistingDirectory = existingDirectory + @"\nonexisting\directory";
 
             emptyDirectory = existingDirectory + @"\emptydirectory";

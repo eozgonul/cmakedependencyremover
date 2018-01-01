@@ -54,6 +54,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectFileManager.cs" />
     <Compile Include="SolutionFileManager.cs" />
     <Compile Include="DirectoryManager.cs" />
     <Compile Include="IDependencyManager.cs" />

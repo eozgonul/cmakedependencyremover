@@ -54,6 +54,7 @@
   <ItemGroup>
     <Compile Include="DirectoryTests.cs" />
     <Compile Include="Program.cs" />
+    <Compile Include="ProjectFileTests.cs" />
     <Compile Include="SolutionFileTests.cs" />
   </ItemGroup>
   <ItemGroup>
