@@ -36,15 +36,26 @@ namespace CmakeDependencyRemover
             }
         }
 
-        static public void RemoveProjectReference(string fileContent, string projectName)
+        static public string RemoveProjectReference(string fileContent, string projectName)
         {
             if(fileContent == null || projectName == null)
             {
                 throw new ArgumentNullException("RemoveProjectReference called with null reference(s)");
             }
 
+            var projectReferences = GetProjectReferenceSection(fileContent, projectName);
 
+            if(projectReferences == null || !projectReferences.Any())
+            {
+                return null;
+            }
+
+            foreach(var projectReference in projectReferences)
+            {
+                fileContent = fileContent.Replace(projectReference, "");
+            }
+
+            return fileContent;
         }
-
     }
 }

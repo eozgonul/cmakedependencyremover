@@ -67,9 +67,34 @@ namespace CmakeDependencyRemover.Test
         [TestCase(null, null)]
         [TestCase(null, "")]
         [TestCase("", null)]
-        public void RemoveProjectReference_ProjectNameNull_ThrowArgumentNullException(string fileContent, string projectName)
+        public void RemoveProjectReference_ParametersNull_ThrowArgumentNullException(string fileContent, string projectName)
         {
             Assert.Throws<ArgumentNullException>(() => ProjectFileManager.RemoveProjectReference(fileContent, projectName));
+        }
+
+        [Category("RemoveProjectReference")]
+        [TestCase("", "")]
+        [TestCase("someInvalidFileContent", "")]
+        [TestCase("", "someProjectName")]
+        [TestCase("someInvalidFileContent", "someProjectName")]
+        public void RemoveProjectReference_FileContentEmptyProjectNameEmpty_ReturnNull(string fileContent, string projectName)
+        {
+            var result = ProjectFileManager.RemoveProjectReference(fileContent, projectName);
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("RemoveProjectReference")]
+        public void RemoveProjectReference_FileContentValidProjectNameInvalid_MakeNoChangesInFileContent()
+        {
+            var result = ProjectFileManager.RemoveProjectReference(projectFileContent, "ZERO_CHEC");
+            Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("RemoveProjectReference")]
+        public void RemoveProjectReference_FileContentValidProjectNameValid_ProjectReferenceRemoved()
+        {
+            var result = ProjectFileManager.RemoveProjectReference(projectFileContent, "ZERO_CHECK");
+            Assert.That(result.Contains(zeroCheckProjectReferenceSection), Is.False);
         }
     }
 }
