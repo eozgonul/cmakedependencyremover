@@ -84,7 +84,7 @@ namespace CmakeDependencyRemover.Test
         }
 
         [Test, Category("RemoveProjectReference")]
-        public void RemoveProjectReference_FileContentValidProjectNameInvalid_MakeNoChangesInFileContent()
+        public void RemoveProjectReference_FileContentValidProjectNameInvalid_ReturnNull()
         {
             var result = ProjectFileManager.RemoveProjectReference(projectFileContent, "ZERO_CHEC");
             Assert.That(result, Is.Null);

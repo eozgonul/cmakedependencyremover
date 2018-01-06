@@ -57,5 +57,16 @@ namespace CmakeDependencyRemover
 
             return fileContent;
         }
+
+
+        static public string ChangeHardCodedProjectDirectoryToMacro(string fileContent, string solutionDirectory)
+        {
+            if(string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(solutionDirectory))
+            {
+                throw new ArgumentNullException("ChangeSolutionDirectoryToMacro called with null reference(s)");
+            }
+
+            return null;
+        }
     }
 }

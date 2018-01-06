@@ -126,7 +126,7 @@ namespace CmakeDependencyRemover
             }            
         }
 
-        static public bool RemoveProjectUIDFromProjectConfigurationPlatforms(string fileContent, string uid)
+        static public string RemoveProjectUIDFromProjectConfigurationPlatforms(string fileContent, string uid)
         {
             if(fileContent == null || uid == null)
             {
@@ -135,12 +135,10 @@ namespace CmakeDependencyRemover
 
             var configs = GetSolutionConfigurations(fileContent);
 
-            if(configs == null || configs.Count == 0)
+            if(configs == null || !configs.Any())
             {
-                return false;
+                return null;
             }
-
-            bool result = false;
 
             foreach(var config in configs)
             {
@@ -164,12 +162,10 @@ namespace CmakeDependencyRemover
                     {
                         fileContent = fileContent.Replace(match.Value, "");
                     }
-
-                    result = true;
                 }
             }
 
-            return result;
+            return fileContent;
         }
     }
 }

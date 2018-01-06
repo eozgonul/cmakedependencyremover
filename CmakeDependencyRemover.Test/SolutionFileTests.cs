@@ -264,37 +264,46 @@ namespace CmakeDependencyRemover.Test
 		[TestCase(null, null)]
 		[TestCase(null, "")]
 		[TestCase("", null)]
-		public void GetSolutionConfigurations_ParametersNull_ThrowArgumentNullException(string fileContent, string uid)
+		public void RemoveProjectUIDFromProjectConfigurationPlatforms_ParametersNull_ThrowArgumentNullException(string fileContent, string uid)
 		{
 			Assert.Throws<ArgumentNullException>(() => SolutionFileManager.RemoveProjectInfoFromSolutionFile(fileContent, uid));
 		}
 
 		[Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
-		public void GetSolutionConfigurations_FileContentEmptyUIDEmpty_ReturnFalse()
+		public void RemoveProjectUIDFromProjectConfigurationPlatforms_FileContentEmptyUIDEmpty_ReturnNull()
 		{
 			var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms("", "");
-			Assert.That(result, Is.False);
+			Assert.That(result, Is.Null);
 		}
 
 		[Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
-		public void GetSolutionConfigurations_FileContentValidUIDEmpty_ReturnFalse()
+		public void RemoveProjectUIDFromProjectConfigurationPlatforms_FileContentValidUIDEmpty_ReturnNull()
 		{
 			var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "");
-			Assert.That(result, Is.False);
+			Assert.AreEqual(result, solutionFileContent);
 		}
 
 		[Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
-		public void GetSolutionConfigurations_FileContentValidUIDInvalid_ReturnFalse()
+		public void RemoveProjectUIDFromProjectConfigurationPlatforms_FileContentValidUIDInvalid_ReturnNull()
 		{
 			var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "someInvalidUID");
-			Assert.That(result, Is.False);
+			Assert.AreEqual(result, solutionFileContent);
 		}
 
 		[Test, Category("RemoveProjectUIDFromConfigurationPlatforms")]
-		public void GetSolutionConfigurations_FileContentValidUIDValid_ReturnTrue()
+		public void RemoveProjectUIDFromProjectConfigurationPlatforms_FileContentValidUIDValid_UIDRemovedFromFileContent()
 		{
 			var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "8BAE2EF6-B67E-3634-9B27-B99536808058");
-			Assert.That(result, Is.True);
+			Assert.That(result.Contains(UIDInfoAllBuild), Is.False);
+		}
+
+		[Category("ChangeSolutionDirectoryToMacro")]
+		[TestCase(null, null)]
+		[TestCase(null, "")]
+		[TestCase("", null)]
+		public void ChangeHardCodedProjectDirectoryToMacro_ParametersNull_ThrowArgumentNullException(string fileContent, string solutionDirectory)
+		{
+			Assert.Throws<ArgumentNullException>(() => ProjectFileManager.ChangeHardCodedProjectDirectoryToMacro(fileContent, solutionDirectory));
 		}
 	}
 }
