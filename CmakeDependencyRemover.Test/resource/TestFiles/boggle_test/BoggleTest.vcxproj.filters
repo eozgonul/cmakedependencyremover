@@ -1,0 +1,27 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_test\source\main.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_test\source\pchboggletest.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_test\include\pchboggletest.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_test\cmake\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="IncludeFiles">
+      <UniqueIdentifier>{17EDFD94-C085-3CEA-B509-64688F9A0B27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles">
+      <UniqueIdentifier>{702F3212-1568-3D46-923C-65D662AA3CBD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

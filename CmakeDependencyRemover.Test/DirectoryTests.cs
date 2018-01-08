@@ -30,16 +30,16 @@ namespace CmakeDependencyRemover.Test
 
             filesAllBuild = new List<string> { existingDirectory + @"\ALL_BUILD.vcxproj",
                                                existingDirectory + @"\ALL_BUILD.vcxproj.filters",
-                                               existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj",
-                                               existingDirectory + @"\SomeInnerDirectory\ALL_BUILD.vcxproj.filters"};
+                                               existingDirectory + @"\boggle_test\ALL_BUILD.vcxproj",
+                                               existingDirectory + @"\boggle_test\ALL_BUILD.vcxproj.filters"};
 
             filesZeroCheck = new List<string> { existingDirectory + @"\ZERO_CHECK.vcxproj",
                                                 existingDirectory + @"\ZERO_CHECK.vcxproj.filters",
-                                                existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj",
-                                                existingDirectory + @"\SomeInnerDirectory\ZERO_CHECK.vcxproj.filters"};
+                                                existingDirectory + @"\boggle_test\ZERO_CHECK.vcxproj",
+                                                existingDirectory + @"\boggle_test\ZERO_CHECK.vcxproj.filters"};
 
             filesSolution = new List<string> { existingDirectory + @"\Boggle.sln",
-                                               existingDirectory + @"\SomeInnerDirectory\Boggle.sln"};
+                                               existingDirectory + @"\boggle_test\Boggle.sln"};
         }
 
         [Test, Category("Directory")]
@@ -321,35 +321,3 @@ namespace CmakeDependencyRemover.Test
         }
     }
 }
-
-        /*
-
-        [SetUp]
-        public void SetupSolutionPath()
-        {
-            listConfigurations = new List<string> { "Debug|x64", "Release|x64" };
-        }
-
-        [Test, Category("ProjectFile")]
-        public void DetectSolutionConfigurations_Debugx64Releasex64_True()
-        {
-            var fileContent = File.ReadAllText(existingSolutionDirectory + "\\Boggle.sln");
-
-            var solutionConfigurations = DependencyManager.DetectSolutionConfigurations(fileContent);
-
-            Assert.True(listConfigurations.SequenceEqual<string>(solutionConfigurations));
-        }
-
-        [Test, Category("ProjectFile")]
-        public void RemoveProjectUIDFromSolutionFileGlobalSettings()
-        {
-            var fileContent = File.ReadAllText(existingSolutionDirectory + "\\Boggle.sln");
-
-            var allBuildUID = DependencyManager.DetectProjectUID(fileContent, "ALL_BUILD");
-            var result = DependencyManager.RemoveProjectUIDFromGlobalSettings(fileContent, allBuildUID);
-
-            Assert.True(result);
-        }
-    }
-}
-*/

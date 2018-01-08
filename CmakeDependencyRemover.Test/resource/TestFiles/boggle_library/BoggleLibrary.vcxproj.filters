@@ -1,0 +1,66 @@
+﻿<?xml version="1.0" encoding="UTF-8"?>
+<Project ToolsVersion="15.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\board.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\boggle.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\dictionary.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\interface.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\node.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\pchbogglelibrary.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\tile.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+    <ClCompile Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\source\trie.cpp">
+      <Filter>SourceFiles</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\board.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\boggle.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\dictionary.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\interface.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\node.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\pchbogglelibrary.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\tile.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+    <ClInclude Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\include\trie.h">
+      <Filter>IncludeFiles</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <CustomBuild Include="C:\Users\eozgonul\Documents\Visual Studio 2017\Projects\CmakeDependencyRemover\CmakeDependencyRemover.Test\resource\TestFiles\boggle_library\cmake\CMakeLists.txt" />
+  </ItemGroup>
+  <ItemGroup>
+    <Filter Include="IncludeFiles">
+      <UniqueIdentifier>{17EDFD94-C085-3CEA-B509-64688F9A0B27}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="SourceFiles">
+      <UniqueIdentifier>{702F3212-1568-3D46-923C-65D662AA3CBD}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+</Project>

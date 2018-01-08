@@ -58,15 +58,69 @@ namespace CmakeDependencyRemover
             return fileContent;
         }
 
-
-        static public string ChangeHardCodedProjectDirectoryToMacro(string fileContent, string solutionDirectory)
+        static public List<string> GetCMakeCustomBuildEventSections(string fileContent)
         {
-            if(string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(solutionDirectory))
+            if(fileContent == null)
             {
-                throw new ArgumentNullException("ChangeSolutionDirectoryToMacro called with null reference(s)");
+                throw new ArgumentNullException("GetItemGroupSections called with null reference");
             }
 
-            return null;
+            var patternFindItemGroup = @"\s*\<ItemGroup\>\s*\<CustomBuild.*?cmake\.exe.*?\<\/CustomBuild\>\s*\<\/ItemGroup\>";
+            var regexFindItemGroup = new Regex(patternFindItemGroup, RegexOptions.Singleline);
+
+            var matches = regexFindItemGroup.Matches(fileContent);
+            if(matches.Count == 0)
+            {
+                return null;
+            }
+            else
+            {
+                return matches.Cast<Match>()
+                              .Select(m => m.Value)
+                              .ToList();
+            }            
+        }
+
+        static public string RemoveCMakeCustomBuildEvents(string fileContent)
+        {
+            if(fileContent == null)
+            {
+                throw new ArgumentNullException("RemoveCMakeBuildEvents called with null reference");
+            }
+            else if(fileContent == "")
+            {
+                return null;
+            }
+
+            var cMakeCustomBuildEvents = GetCMakeCustomBuildEventSections(fileContent);
+
+            if(cMakeCustomBuildEvents == null)
+            {
+                return null;
+            }
+
+            foreach(var cMakeCustomBuildEvent in cMakeCustomBuildEvents)
+            {
+                fileContent = fileContent.Replace(cMakeCustomBuildEvent, "");
+            }
+            
+            return fileContent;
+        }
+
+        // TODO: Empty parameters should not be throwing ArgumentNullException, refactor
+        static public string ChangeHardCodedProjectDirectoryToMacro(string fileContent, string projectDirectory)
+        {
+            if(string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(projectDirectory))
+            {
+                throw new ArgumentNullException("ChangeHardCodedProjectDirectoryToMacro called with null reference(s)");
+            }
+
+            if(!DirectoryManager.CheckIfDirectoryExists(projectDirectory) || !fileContent.Contains(projectDirectory))
+            {
+                return null;
+            }
+
+            return fileContent.Replace(projectDirectory, "${ProjectDir}");
         }
     }
 }

@@ -296,14 +296,5 @@ namespace CmakeDependencyRemover.Test
 			var result = SolutionFileManager.RemoveProjectUIDFromProjectConfigurationPlatforms(solutionFileContent, "8BAE2EF6-B67E-3634-9B27-B99536808058");
 			Assert.That(result.Contains(UIDInfoAllBuild), Is.False);
 		}
-
-		[Category("ChangeSolutionDirectoryToMacro")]
-		[TestCase(null, null)]
-		[TestCase(null, "")]
-		[TestCase("", null)]
-		public void ChangeHardCodedProjectDirectoryToMacro_ParametersNull_ThrowArgumentNullException(string fileContent, string solutionDirectory)
-		{
-			Assert.Throws<ArgumentNullException>(() => ProjectFileManager.ChangeHardCodedProjectDirectoryToMacro(fileContent, solutionDirectory));
-		}
-	}
+    }
 }
