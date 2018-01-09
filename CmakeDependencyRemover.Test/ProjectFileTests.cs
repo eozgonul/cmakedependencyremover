@@ -150,14 +150,16 @@ namespace CmakeDependencyRemover.Test
         [TestCase(null, null)]
         [TestCase(null, "")]
         [TestCase("", null)]
-        [TestCase("", "")]
         public void ChangeHardCodedProjectDirectoryToMacro_ParametersNullOrEmpty_ThrowArgumentNullException(string fileContent, string solutionDirectory)
         {
             Assert.Throws<ArgumentNullException>(() => ProjectFileManager.ChangeHardCodedProjectDirectoryToMacro(fileContent, solutionDirectory));
         }
 
         [Category("ChangeHardCodedProjectDirectoryToMacro")]
-        [TestCase("someInvalidFileContent", "someInvalidDirectory")]
+        [TestCase("", "")]
+        [TestCase("", @"C:\some\invalid\directory")]
+        [TestCase("someInvalidFileContent", "")]
+        [TestCase("someInvalidFileContent", @"C:\some\invalid\directory")]
         public void ChangeHardCodedProjectDirectoryToMacro_ParametersEmptyOrInvalid_ReturnNull(string fileContent, string projectDirectory)
         {
             var result = ProjectFileManager.ChangeHardCodedProjectDirectoryToMacro(fileContent, projectDirectory);
