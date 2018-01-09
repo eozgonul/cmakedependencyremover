@@ -124,17 +124,26 @@ namespace CmakeDependencyRemover.Test
             Assert.That(result.SequenceEqual(cMakeCustomBuildEventSections));
         }
 
-        [Test, Category("RemoveCMakeBuildEvents")]
+        [Test, Category("RemoveCustomCMakeBuildEvents")]
         public void RemoveCMakeCustomBuildEvents_ParameterNullOrEmpty_ThrowArgumentNullException()
         {
             Assert.Throws<ArgumentNullException>(() => ProjectFileManager.RemoveCMakeCustomBuildEvents(null));
         }
 
-        [Test, Category("RemoveCMakeBuildEvents")]
-        public void RemoveCMakeCustomBuildEvents_FileContentEmpty_ReturnNull()
+        [Category("RemoveCustomCMakeBuildEvents")]
+        [TestCase("")]
+        [TestCase("invalidFileContent")]
+        public void RemoveCMakeCustomBuildEvents_FileContentEmpty_ReturnNull(string fileContent)
         {
-            var result = ProjectFileManager.RemoveCMakeCustomBuildEvents("");
+            var result = ProjectFileManager.RemoveCMakeCustomBuildEvents(fileContent);
             Assert.That(result, Is.Null);
+        }
+
+        [Test, Category("RemoveCustomCMakeBuildEvents")]
+        public void RemoveCMakeBuildEvents_FileContentValid_ReturnCustomBuildEventRemoved()
+        {
+            var result = ProjectFileManager.RemoveCMakeCustomBuildEvents(projectFileContent);
+            Assert.That(result.Contains(cMakeCustomBuildEventSection), Is.False);
         }
 
         [Category("ChangeHardCodedProjectDirectoryToMacro")]
