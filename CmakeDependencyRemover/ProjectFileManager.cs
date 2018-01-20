@@ -106,16 +106,17 @@ namespace CmakeDependencyRemover
             
             return fileContent;
         }
-
-        // TODO: Empty parameters should not be throwing ArgumentNullException, refactor
+        
         static public string ChangeHardCodedProjectDirectoryToMacro(string fileContent, string projectDirectory)
         {
-            if(string.IsNullOrEmpty(fileContent) || string.IsNullOrEmpty(projectDirectory))
+            if(fileContent == null || projectDirectory == null)
             {
                 throw new ArgumentNullException("ChangeHardCodedProjectDirectoryToMacro called with null reference(s)");
             }
-
-            if(!DirectoryManager.CheckIfDirectoryExists(projectDirectory) || !fileContent.Contains(projectDirectory))
+            else if(fileContent == "" ||
+                    projectDirectory == "" ||
+                    !DirectoryManager.CheckIfDirectoryExists(projectDirectory) ||
+                    !fileContent.Contains(projectDirectory))
             {
                 return null;
             }
