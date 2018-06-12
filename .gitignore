@@ -32,3 +32,13 @@ CmakeDependencyRemover\.Test/resource/TestFiles/boggle_test/cmake_install\.cmake
 CmakeDependencyRemover\.Test/resource/TestFiles/CMakeCache\.txt
 
 CmakeDependencyRemover\.Test/resource/TestFiles/cmake_install\.cmake
+
+CmakeDependencyRemover/CmakeDependencyRemover\.csproj\.user
+
+CmakeDependencyRemover\.UI/bin/
+
+CmakeDependencyRemover\.UI/obj/
+
+CmakeDependencyRemover\.UI/CmakeDependencyRemover\.UI\.csproj\.user
+
+packages/
