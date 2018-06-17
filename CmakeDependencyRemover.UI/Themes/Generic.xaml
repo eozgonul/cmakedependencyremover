@@ -7,4 +7,10 @@
     <Style TargetType="{x:Type local:MainTabControl}"
         BasedOn = "{StaticResource {x:Type TabControl}}">
     </Style>
+    <Style TargetType="{x:Type local:MainTabControlItem}"
+        BasedOn = "{StaticResource {x:Type TabItem}}">
+    </Style>
+    <Style TargetType="{x:Type local:DirectoryTreeViewItem}"
+        BasedOn = "{StaticResource {x:Type TreeViewItem}}">
+    </Style>
 </ResourceDictionary>

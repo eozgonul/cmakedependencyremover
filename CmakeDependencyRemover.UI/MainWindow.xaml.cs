@@ -18,9 +18,6 @@ using System.IO;
 
 namespace CmakeDependencyRemover.UI
 {
-    /// <summary>
-    /// Interaction logic for MainWindow.xaml
-    /// </summary>
     public partial class MainWindow : Window
     {
         public MainWindow()
@@ -70,9 +67,9 @@ namespace CmakeDependencyRemover.UI
 
         private void FillTreeViewWithSolutionDirectoryData(string directoryPath)
         {
-            var stack = new Stack<TreeViewItem>();
+            var stack = new Stack<UIControls.DirectoryTreeViewItem>();
             var rootDirectory = new DirectoryInfo(directoryPath);
-            var node = new TreeViewItem{ Header = rootDirectory.Name, Tag = rootDirectory };
+            var node = new UIControls.DirectoryTreeViewItem { Header = rootDirectory.Name, Tag = rootDirectory };
             stack.Push(node);
 
             while (stack.Count > 0)
@@ -81,7 +78,7 @@ namespace CmakeDependencyRemover.UI
                 var directoryInfo = (DirectoryInfo)currentNode.Tag;
                 foreach (var directory in directoryInfo.GetDirectories())
                 {
-                    var childDirectoryNode = new TreeViewItem { Header = directory.Name, Tag = directory };
+                    var childDirectoryNode = new UIControls.DirectoryTreeViewItem { Header = directory.Name, Tag = directory };
                     currentNode.Items.Add(childDirectoryNode);
                     stack.Push(childDirectoryNode);
                 }
@@ -90,7 +87,7 @@ namespace CmakeDependencyRemover.UI
 
                 foreach (var file in directoryInfo.GetFiles())
                 {
-                    var treeViewItem = new TreeViewItem { Header = file.Name };
+                    var treeViewItem = new UIControls.DirectoryTreeViewItem { Header = file.Name, FileInformation = file };
                     var test = file.FullName;
 
                     if (filesToDelete.Contains(test))
@@ -98,7 +95,7 @@ namespace CmakeDependencyRemover.UI
                         treeViewItem.Foreground = Brushes.Red;
                     }
 
-                    treeViewItem.AddHandler(TreeViewItem.MouseDoubleClickEvent, new MouseButtonEventHandler(OnTreeViewItemClicked));
+                    treeViewItem.AddHandler(UIControls.DirectoryTreeViewItem.MouseDoubleClickEvent, new MouseButtonEventHandler(OnTreeViewItemClicked));
                     currentNode.Items.Add(treeViewItem);
                 }
             }
@@ -118,48 +115,19 @@ namespace CmakeDependencyRemover.UI
 
         private void OnTreeViewItemClicked(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            var treeViewItem = (TreeViewItem)(sender);
-            var parentItem = (TreeViewItem)(treeViewItem.Parent);
+            var treeViewItem = (UIControls.DirectoryTreeViewItem)(sender);
+            var parentItem = (UIControls.DirectoryTreeViewItem)(treeViewItem.Parent);
             
             if(parentItem != null && parentItem is TreeViewItem)
             {
                 var fileFullPath = /*SolutionDirectory + @"\" + */parentItem.Tag.ToString() + @"\" + treeViewItem.Header;
-                OpenFileInTab(fileFullPath, treeViewItem.Header.ToString());
+                OpenFileInTab(fileFullPath, treeViewItem.FileInformation);
             }
         }
 
-        private void OpenFileInTab(string filePath, string fileName)
+        private void OpenFileInTab(string filePath, FileInfo fileInformation)
         {
-            var fileContent = ReadFile(filePath);
-
-            var textBox = CreateTextBoxFilledWithFileContent(fileContent);
-            var tabItem = CreateTabItem(textBox, fileName);
-
-            tc_FileContents.Items.Add(tabItem);
-            tc_FileContents.SelectedItem = tabItem;            
-        }
-
-        private TextBox CreateTextBoxFilledWithFileContent(string textBoxContent)
-        {
-            var textBox = new TextBox() { Text = textBoxContent };
-            textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
-            textBox.VerticalAlignment = VerticalAlignment.Stretch;
-
-            return textBox;
-        }
-
-        private TabItem CreateTabItem(object content, string header)
-        {
-            var tabItem = new TabItem();
-            tabItem.Content = content;
-            tabItem.Header = header;
-
-            return tabItem;
-        }
-
-        private string ReadFile(string filePath)
-        {
-            return File.ReadAllText(filePath);
+            tc_FileContents.OpenFile(fileInformation);
         }
 
         string SolutionDirectory { get; set; }

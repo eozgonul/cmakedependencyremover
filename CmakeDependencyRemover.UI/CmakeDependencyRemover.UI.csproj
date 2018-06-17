@@ -77,7 +77,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="UIControls\DirectoryTreeViewItem.cs" />
     <Compile Include="UIControls\MainTabControl.cs" />
+    <Compile Include="UIControls\MainTabControlItem.cs" />
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>

@@ -13,42 +13,66 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 
+using System.IO;
+
 namespace CmakeDependencyRemover.UI.UIControls
 {
-    /// <summary>
-    /// Follow steps 1a or 1b and then 2 to use this custom control in a XAML file.
-    ///
-    /// Step 1a) Using this custom control in a XAML file that exists in the current project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:CmakeDependencyRemover.UI.UIControls"
-    ///
-    ///
-    /// Step 1b) Using this custom control in a XAML file that exists in a different project.
-    /// Add this XmlNamespace attribute to the root element of the markup file where it is 
-    /// to be used:
-    ///
-    ///     xmlns:MyNamespace="clr-namespace:CmakeDependencyRemover.UI.UIControls;assembly=CmakeDependencyRemover.UI.UIControls"
-    ///
-    /// You will also need to add a project reference from the project where the XAML file lives
-    /// to this project and Rebuild to avoid compilation errors:
-    ///
-    ///     Right click on the target project in the Solution Explorer and
-    ///     "Add Reference"->"Projects"->[Browse to and select this project]
-    ///
-    ///
-    /// Step 2)
-    /// Go ahead and use your control in the XAML file.
-    ///
-    ///     <MyNamespace:MainTabControl/>
-    ///
-    /// </summary>
     public class MainTabControl : TabControl
     {
         static MainTabControl()
         {
             DefaultStyleKeyProperty.OverrideMetadata(typeof(MainTabControl), new FrameworkPropertyMetadata(typeof(MainTabControl)));
+        }
+
+        public void OpenFile(FileInfo fileInformation)
+        {
+            var item = CheckIfFileOpenInTab(fileInformation);
+
+            if(item != null)
+            {
+                SelectedItem = item;
+            }
+            else
+            {
+                var fileContent = File.ReadAllText(fileInformation.FullName);
+
+                var textBox = CreateTextBoxFilledWithFileContent(fileContent);
+                var tabItem = CreateTabItem(textBox, fileInformation);
+
+                Items.Add(tabItem);
+                SelectedItem = tabItem;
+            }
+        }
+
+        public MainTabControlItem CheckIfFileOpenInTab(FileInfo fileInformation)
+        {
+            foreach (MainTabControlItem item in Items)
+            {
+                if(item.FileInformation.FullName == fileInformation.FullName)
+                {
+                    return item;
+                }
+            }
+            return null;
+        }
+
+        private TabItem CreateTabItem(object content, FileInfo fileInformation)
+        {
+            var tabItem = new UIControls.MainTabControlItem();
+            tabItem.Content = content;
+            tabItem.Header = fileInformation.Name;
+            tabItem.FileInformation = fileInformation;
+
+            return tabItem;
+        }
+
+        private TextBox CreateTextBoxFilledWithFileContent(string textBoxContent)
+        {
+            var textBox = new TextBox() { Text = textBoxContent };
+            textBox.HorizontalAlignment = HorizontalAlignment.Stretch;
+            textBox.VerticalAlignment = VerticalAlignment.Stretch;
+
+            return textBox;
         }
     }
 }
