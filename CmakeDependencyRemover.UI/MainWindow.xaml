@@ -5,6 +5,7 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CmakeDependencyRemover.UI"
         xmlns:local2="clr-namespace:CmakeDependencyRemover.UI.UIControls"
+        xmlns:viewmodels="clr-namespace:CmakeDependencyRemover.UI.ViewModels"
         mc:Ignorable="d"
         Title="CMake Dependency Remover" Height="350" Width="525">
     <Grid>
@@ -14,7 +15,35 @@
                 <MenuItem x:Name="mi_Exit" Header="Exit"/>
             </MenuItem>
         </Menu>
+        <!--
         <TreeView x:Name="tv_SolutionFiles" HorizontalAlignment="Left" Width="146" Margin="0,20,0,0"/>
+        -->
+        <TreeView x:Name="tv_SolutionFiles" HorizontalAlignment="Left" Width="146" Margin="0,20,0,0" ItemsSource="{Binding Directories}">
+            <TreeView.ItemContainerStyle>
+                <Style TargetType="{x:Type TreeViewItem}">
+                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                    <Style.Triggers>
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter Property="FontWeight" Value="Bold"/>
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </TreeView.ItemContainerStyle>
+            <TreeView.Resources>
+                <HierarchicalDataTemplate
+                    DataType="{x:Type viewmodels:DirectoryViewModel}"
+                    ItemsSource="{Binding Children}"
+                    >
+                    <StackPanel Orientation="Horizontal">
+                        <Image Width="16" Height="16" Margin="3,0" />
+                        <TextBlock Text="{Binding DirectoryName}" />
+                    </StackPanel>
+                </HierarchicalDataTemplate>
+            </TreeView.Resources>
+            
+        </TreeView>
+
         <local2:MainTabControl x:Name="tc_FileContents" Margin="151,20,0,0"/>
     </Grid>
 </Window>

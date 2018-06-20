@@ -13,6 +13,7 @@ using System.Windows.Media.Imaging;
 using System.Windows.Navigation;
 using System.Windows.Shapes;
 using Microsoft.WindowsAPICodePack.Dialogs;
+using System.Threading;
 
 using System.IO;
 
@@ -20,11 +21,14 @@ namespace CmakeDependencyRemover.UI
 {
     public partial class MainWindow : Window
     {
+        string SolutionDirectory { get; set; }
+        
         public MainWindow()
         {
             InitializeComponent();
 
             InitializeSubComponents();
+
         }
 
         private void InitializeSubComponents()
@@ -46,6 +50,9 @@ namespace CmakeDependencyRemover.UI
             {
                 LoadSolutionDirectory(dialog.FileName);
                 SolutionDirectory = dialog.FileName;
+
+                tv_SolutionFiles.DataContext = new ViewModels.DirectoryView(new DirectoryInfo(dialog.FileName).GetDirectories().ToArray());
+
             }
         }
 
@@ -66,6 +73,12 @@ namespace CmakeDependencyRemover.UI
         }
 
         private void FillTreeViewWithSolutionDirectoryData(string directoryPath)
+        {
+            //await Task.Run(() => PopulateTreeViewNodes(directoryPath));
+            //await StartSTATask(() => PopulateTreeViewNodes(directoryPath));
+        }
+
+        private void PopulateTreeViewNodes(string directoryPath)
         {
             var stack = new Stack<UIControls.DirectoryTreeViewItem>();
             var rootDirectory = new DirectoryInfo(directoryPath);
@@ -99,8 +112,32 @@ namespace CmakeDependencyRemover.UI
                     currentNode.Items.Add(treeViewItem);
                 }
             }
+            
 
-            tv_SolutionFiles.Items.Add(node);
+
+            //tv_SolutionFiles.Items.Add(node);   
+   
+           
+        }
+
+        Task StartSTATask(Action action)
+        {
+            TaskCompletionSource<object> source = new TaskCompletionSource<object>();
+            Thread thread = new Thread(() =>
+            {
+                try
+                {
+                    action();
+                    source.SetResult(null);
+                }
+                catch (Exception ex)
+                {
+                    source.SetException(ex);
+                }
+            });
+            thread.SetApartmentState(ApartmentState.STA);
+            thread.Start();
+            return source.Task;
         }
 
         private List<string> GetFilesToDelete(string directoryPath)
@@ -129,7 +166,5 @@ namespace CmakeDependencyRemover.UI
         {
             tc_FileContents.OpenFile(fileInformation);
         }
-
-        string SolutionDirectory { get; set; }
     }
 }
