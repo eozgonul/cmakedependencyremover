@@ -28,6 +28,11 @@ namespace CmakeDependencyRemover.UI.ViewModels
             {
                 base.Children.Add(new DirectoryViewModel(directoryInfo));
             }
+
+            foreach(FileInfo fileInfo in _directoryInfo.GetFiles())
+            {
+                base.Children.Add(new FileViewModel(fileInfo));
+            }
         }
 
     }

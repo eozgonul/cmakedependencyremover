@@ -52,7 +52,6 @@ namespace CmakeDependencyRemover.UI
                 SolutionDirectory = dialog.FileName;
 
                 tv_SolutionFiles.DataContext = new ViewModels.DirectoryView(new DirectoryInfo(dialog.FileName).GetDirectories().ToArray());
-
             }
         }
 
@@ -113,11 +112,7 @@ namespace CmakeDependencyRemover.UI
                 }
             }
             
-
-
             //tv_SolutionFiles.Items.Add(node);   
-   
-           
         }
 
         Task StartSTATask(Action action)
