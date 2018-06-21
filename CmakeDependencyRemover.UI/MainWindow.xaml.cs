@@ -50,8 +50,6 @@ namespace CmakeDependencyRemover.UI
             {
                 LoadSolutionDirectory(dialog.FileName);
                 SolutionDirectory = dialog.FileName;
-
-                tv_SolutionFiles.DataContext = new ViewModels.DirectoryView(new DirectoryInfo(dialog.FileName).GetDirectories().ToArray());
             }
         }
 
@@ -63,76 +61,13 @@ namespace CmakeDependencyRemover.UI
         private void LoadSolutionDirectory(string selectedDirectory)
         {
             ClearSolutionFiles();
-            FillTreeViewWithSolutionDirectoryData(selectedDirectory);
+            DirectoryInfo[] directoryInfos = new DirectoryInfo[] { new DirectoryInfo(selectedDirectory) };
+            tv_SolutionFiles.DataContext = new ViewModels.DirectoryView(directoryInfos);
         }
 
         private void ClearSolutionFiles()
         {
             tv_SolutionFiles.Items.Clear();
-        }
-
-        private void FillTreeViewWithSolutionDirectoryData(string directoryPath)
-        {
-            //await Task.Run(() => PopulateTreeViewNodes(directoryPath));
-            //await StartSTATask(() => PopulateTreeViewNodes(directoryPath));
-        }
-
-        private void PopulateTreeViewNodes(string directoryPath)
-        {
-            var stack = new Stack<UIControls.DirectoryTreeViewItem>();
-            var rootDirectory = new DirectoryInfo(directoryPath);
-            var node = new UIControls.DirectoryTreeViewItem { Header = rootDirectory.Name, Tag = rootDirectory };
-            stack.Push(node);
-
-            while (stack.Count > 0)
-            {
-                var currentNode = stack.Pop();
-                var directoryInfo = (DirectoryInfo)currentNode.Tag;
-                foreach (var directory in directoryInfo.GetDirectories())
-                {
-                    var childDirectoryNode = new UIControls.DirectoryTreeViewItem { Header = directory.Name, Tag = directory };
-                    currentNode.Items.Add(childDirectoryNode);
-                    stack.Push(childDirectoryNode);
-                }
-
-                var filesToDelete = GetFilesToDelete(directoryPath);
-
-                foreach (var file in directoryInfo.GetFiles())
-                {
-                    var treeViewItem = new UIControls.DirectoryTreeViewItem { Header = file.Name, FileInformation = file };
-                    var test = file.FullName;
-
-                    if (filesToDelete.Contains(test))
-                    {
-                        treeViewItem.Foreground = Brushes.Red;
-                    }
-
-                    treeViewItem.AddHandler(UIControls.DirectoryTreeViewItem.MouseDoubleClickEvent, new MouseButtonEventHandler(OnTreeViewItemClicked));
-                    currentNode.Items.Add(treeViewItem);
-                }
-            }
-            
-            //tv_SolutionFiles.Items.Add(node);   
-        }
-
-        Task StartSTATask(Action action)
-        {
-            TaskCompletionSource<object> source = new TaskCompletionSource<object>();
-            Thread thread = new Thread(() =>
-            {
-                try
-                {
-                    action();
-                    source.SetResult(null);
-                }
-                catch (Exception ex)
-                {
-                    source.SetException(ex);
-                }
-            });
-            thread.SetApartmentState(ApartmentState.STA);
-            thread.Start();
-            return source.Task;
         }
 
         private List<string> GetFilesToDelete(string directoryPath)
