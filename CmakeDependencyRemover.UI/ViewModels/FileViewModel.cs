@@ -10,16 +10,16 @@ namespace CmakeDependencyRemover.UI.ViewModels
 {
     class FileViewModel : TreeViewItemViewModel
     {
-        readonly FileInfo _fileInfo;
+        readonly FileInfo fileInfo;
 
         public FileViewModel(FileInfo fileInfo) : base(null, true)
         {
-            _fileInfo = fileInfo;
+            this.fileInfo = fileInfo;
         }
 
         public string FileName
         {
-            get { return _fileInfo.Name; }
+            get { return fileInfo.Name; }
         }
 
         protected override void LoadChildren()

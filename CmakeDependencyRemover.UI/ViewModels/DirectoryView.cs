@@ -11,11 +11,11 @@ namespace CmakeDependencyRemover.UI.ViewModels
 {
     class DirectoryView
     {
-        readonly ReadOnlyCollection<DirectoryViewModel> _directories;
+        readonly ReadOnlyCollection<DirectoryViewModel> directoryViewModels;
 
         public DirectoryView(DirectoryInfo[] directoryInfos)
         {
-            _directories = new ReadOnlyCollection<DirectoryViewModel>(
+            directoryViewModels = new ReadOnlyCollection<DirectoryViewModel>(
                 (from directory in directoryInfos
                  select new DirectoryViewModel(directory))
                  .ToList());
@@ -23,7 +23,7 @@ namespace CmakeDependencyRemover.UI.ViewModels
 
         public ReadOnlyCollection<DirectoryViewModel> Directories
         {
-            get { return _directories; }
+            get { return directoryViewModels; }
         }
     }
 }

@@ -10,26 +10,26 @@ namespace CmakeDependencyRemover.UI.ViewModels
 {
     class DirectoryViewModel : TreeViewItemViewModel
     {
-        readonly DirectoryInfo _directoryInfo;
+        readonly DirectoryInfo directoryInfo;
         
         public DirectoryViewModel(DirectoryInfo directoryInfo) : base(null, true)
         {
-            _directoryInfo = directoryInfo;
+            this.directoryInfo = directoryInfo;
         }
 
         public string DirectoryName
         {
-            get { return _directoryInfo.Name; }
+            get { return directoryInfo.Name; }
         }
 
         protected override void LoadChildren()
         {
-            foreach(DirectoryInfo directoryInfo in _directoryInfo.GetDirectories())
+            foreach(DirectoryInfo directoryInfo in this.directoryInfo.GetDirectories())
             {
                 base.Children.Add(new DirectoryViewModel(directoryInfo));
             }
 
-            foreach(FileInfo fileInfo in _directoryInfo.GetFiles())
+            foreach(FileInfo fileInfo in directoryInfo.GetFiles())
             {
                 base.Children.Add(new FileViewModel(fileInfo));
             }

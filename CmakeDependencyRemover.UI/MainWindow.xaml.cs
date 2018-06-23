@@ -61,7 +61,7 @@ namespace CmakeDependencyRemover.UI
         private void LoadSolutionDirectory(string selectedDirectory)
         {
             ClearSolutionFiles();
-            DirectoryInfo[] directoryInfos = new DirectoryInfo[] { new DirectoryInfo(selectedDirectory) };
+            var directoryInfos = new DirectoryInfo[] { new DirectoryInfo(selectedDirectory) };
             tv_SolutionFiles.DataContext = new ViewModels.DirectoryView(directoryInfos);
         }
 
