@@ -13,22 +13,22 @@ namespace CmakeDependencyRemover.UI.ViewModels
     {
         static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
 
-        readonly TreeViewItemViewModel _parent;
-        readonly ObservableCollection<TreeViewItemViewModel> _children;
+        readonly TreeViewItemViewModel parent;
+        readonly ObservableCollection<TreeViewItemViewModel> children;
 
-        bool _isExpanded;
-        bool _isSelected;
+        bool isExpanded;
+        bool isSelected;
 
 
         protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren)
         {
-            _parent = parent;
+            this.parent = parent;
 
-            _children = new ObservableCollection<TreeViewItemViewModel>();
+            children = new ObservableCollection<TreeViewItemViewModel>();
 
             if(lazyLoadChildren)
             {
-                _children.Add(DummyChild);
+                children.Add(DummyChild);
             }
         }
 
@@ -38,28 +38,28 @@ namespace CmakeDependencyRemover.UI.ViewModels
 
         public ObservableCollection<TreeViewItemViewModel> Children
         {
-            get { return _children; }
+            get { return children; }
         }
 
         public bool HasDummyChild
         {
-            get { return this.Children.Count == 1 && this.Children[0] == DummyChild; }
+            get { return Children.Count == 1 && Children[0] == DummyChild; }
         }
 
         public bool IsExpanded
         {
-            get { return _isExpanded; }
+            get { return isExpanded; }
             set
             {
-                if(value != _isExpanded)
+                if(value != isExpanded)
                 {
-                    _isExpanded = value;
+                    isExpanded = value;
                     this.OnPropertyChanged("IsExpanded");
                 }
 
-                if(_isExpanded && _parent != null)
+                if(isExpanded && parent != null)
                 {
-                    _parent.IsExpanded = true;
+                    parent.IsExpanded = true;
                 }
                 if(this.HasDummyChild)
                 {
@@ -71,12 +71,12 @@ namespace CmakeDependencyRemover.UI.ViewModels
 
         public bool IsSelected
         {
-            get { return _isSelected; }
+            get { return isSelected; }
             set
             {
-                if(value != _isSelected)
+                if(value != isSelected)
                 {
-                    _isSelected = value;
+                    isSelected = value;
                     this.OnPropertyChanged("IsSelected");
                 }
             }
@@ -89,7 +89,7 @@ namespace CmakeDependencyRemover.UI.ViewModels
         
         public TreeViewItemViewModel Parent
         {
-            get { return _parent; }
+            get { return parent; }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
