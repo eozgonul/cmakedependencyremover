@@ -82,14 +82,18 @@ namespace CmakeDependencyRemover.UI
 
         private void OnTreeViewItemClicked(object sender, MouseButtonEventArgs mouseButtonEventArgs)
         {
-            var treeViewItem = (UIControls.DirectoryTreeViewItem)(sender);
-            var parentItem = (UIControls.DirectoryTreeViewItem)(treeViewItem.Parent);
+            var treeViewItem = (TreeViewItem)(sender);
+            //var parentItem = (TreeViewItem)(treeViewItem.Parent);
             
-            if(parentItem != null && parentItem is TreeViewItem)
-            {
-                var fileFullPath = /*SolutionDirectory + @"\" + */parentItem.Tag.ToString() + @"\" + treeViewItem.Header;
-                OpenFileInTab(fileFullPath, treeViewItem.FileInformation);
-            }
+            //if(parentItem != null && parentItem is TreeViewItem)
+            //{
+            //    var fileFullPath = /*SolutionDirectory + @"\" + */parentItem.Tag.ToString() + @"\" + treeViewItem.Header;
+                //OpenFileInTab(fileFullPath, treeViewItem.FileInformation);
+            //}
+
+          
+            var header = treeViewItem.Header.ToString();
+
         }
 
         private void OpenFileInTab(string filePath, FileInfo fileInformation)
