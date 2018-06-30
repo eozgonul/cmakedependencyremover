@@ -58,20 +58,19 @@
         <!--
         <local2:MainTabControl x:Name="tc_FileContents" Margin="151,20,0,0" />
         -->
-        <TabControl x:Name="tc_FileContents" Margin="151,20,0,0" ItemsSource="{Binding OpenFiles}">
+        <TabControl x:Name="tc_FileContents" Margin="151,20,0,0" ItemsSource="{Binding OpenFiles}" SelectedItem="{Binding CurrentItem, Mode=TwoWay}" SelectedIndex="{Binding SelectedIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
                     <StackPanel Orientation="Horizontal">
                         <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
-                        <Button Content="X" Command="{Binding CloseCommand, Mode=OneWay}"/>
+                        <Button Content="x" Command="{Binding CloseCommand, Mode=OneWay}"/>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
                     <StackPanel>
-                        <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
-                        <TextBlock Text="{Binding Content, Mode=OneWay}"/>
+                        <TextBox Text="{Binding Content, Mode=OneWay}"/>
                     </StackPanel>
                 </DataTemplate>
             </TabControl.ContentTemplate>

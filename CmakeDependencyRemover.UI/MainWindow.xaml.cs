@@ -59,8 +59,7 @@ namespace CmakeDependencyRemover.UI
         {
             Close();
         }
-
-        private void LoadSolutionDirectory(string selectedDirectory)
+                private void LoadSolutionDirectory(string selectedDirectory)
         {
             ClearSolutionFiles();
             var directoryInfos = new DirectoryInfo[] { new DirectoryInfo(selectedDirectory) };

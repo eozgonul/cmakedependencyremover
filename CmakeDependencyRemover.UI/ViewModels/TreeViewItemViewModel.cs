@@ -12,8 +12,6 @@ namespace CmakeDependencyRemover.UI.ViewModels
     class TreeViewItemViewModel : INotifyPropertyChanged
     {
         static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
-
-        readonly TreeViewItemViewModel parent;
         readonly ObservableCollection<TreeViewItemViewModel> children;
 
         bool isExpanded;
@@ -22,7 +20,7 @@ namespace CmakeDependencyRemover.UI.ViewModels
 
         protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren)
         {
-            this.parent = parent;
+            Parent = parent;
 
             children = new ObservableCollection<TreeViewItemViewModel>();
 
@@ -57,9 +55,9 @@ namespace CmakeDependencyRemover.UI.ViewModels
                     this.OnPropertyChanged("IsExpanded");
                 }
 
-                if(isExpanded && parent != null)
+                if(isExpanded && Parent != null)
                 {
-                    parent.IsExpanded = true;
+                    Parent.IsExpanded = true;
                 }
                 if(this.HasDummyChild)
                 {
@@ -82,15 +80,9 @@ namespace CmakeDependencyRemover.UI.ViewModels
             }
         }
 
-        protected virtual void LoadChildren()
-        {
-
-        }
+        protected virtual void LoadChildren() {}
         
-        public TreeViewItemViewModel Parent
-        {
-            get { return parent; }
-        }
+        public TreeViewItemViewModel Parent { get; set; }
 
         public event PropertyChangedEventHandler PropertyChanged;
 
