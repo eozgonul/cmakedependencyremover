@@ -4,7 +4,6 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:CmakeDependencyRemover.UI"
-        xmlns:local2="clr-namespace:CmakeDependencyRemover.UI.UIControls"
         xmlns:viewmodels="clr-namespace:CmakeDependencyRemover.UI.ViewModels"
         xmlns:i="clr-namespace:System.Windows.Interactivity;assembly=System.Windows.Interactivity"
         xmlns:prism="http://prismlibrary.com/"
@@ -18,7 +17,6 @@
             </MenuItem>
         </Menu>
         <TreeView x:Name="tv_SolutionFiles" HorizontalAlignment="Left" Width="146" Margin="0,20,0,0" ItemsSource="{Binding Directories}">
-            
             <TreeView.ItemContainerStyle>
                 <Style TargetType="{x:Type TreeViewItem}" >
                     <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
@@ -40,7 +38,6 @@
                         <TextBlock Text="{Binding DirectoryName}" />
                     </StackPanel>
                 </HierarchicalDataTemplate>
-
                 <HierarchicalDataTemplate
                     DataType="{x:Type viewmodels:FileViewModel}"
                     ItemsSource="{Binding Children}"
@@ -53,12 +50,31 @@
             </TreeView.Resources>
             <i:Interaction.Triggers>
                 <i:EventTrigger EventName="MouseDoubleClick">
-                    <prism:InvokeCommandAction Command="{Binding TreeNodeDoubleClickEvent}" CommandParameter="{Binding  Path=SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}">
+                    <prism:InvokeCommandAction Command="{Binding TreeNodeDoubleClickEvent}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}">
                     </prism:InvokeCommandAction>
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>
-
-        <local2:MainTabControl x:Name="tc_FileContents" Margin="151,20,0,0"/>
+        <!--
+        <local2:MainTabControl x:Name="tc_FileContents" Margin="151,20,0,0" />
+        -->
+        <TabControl x:Name="tc_FileContents" Margin="151,20,0,0" ItemsSource="{Binding OpenFiles}">
+            <TabControl.ItemTemplate>
+                <DataTemplate>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
+                        <Button Content="X" Command="{Binding CloseCommand, Mode=OneWay}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ItemTemplate>
+            <TabControl.ContentTemplate>
+                <DataTemplate>
+                    <StackPanel>
+                        <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
+                        <TextBlock Text="{Binding Content, Mode=OneWay}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </TabControl.ContentTemplate>
+        </TabControl>
     </Grid>
 </Window>

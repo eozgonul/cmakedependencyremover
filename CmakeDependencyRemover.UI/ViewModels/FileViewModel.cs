@@ -26,5 +26,13 @@ namespace CmakeDependencyRemover.UI.ViewModels
         {
             base.LoadChildren();
         }
+
+        public string Content
+        {
+            get
+            {
+                return File.ReadAllText(fileInfo.FullName);
+            }
+        }
     }
 }

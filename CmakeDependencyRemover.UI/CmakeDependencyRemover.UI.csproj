@@ -95,9 +95,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="UIControls\DirectoryTreeViewItem.cs" />
-    <Compile Include="UIControls\MainTabControl.cs" />
-    <Compile Include="UIControls\MainTabControlItem.cs" />
     <Compile Include="ViewModels\DirectoryView.cs" />
     <Compile Include="ViewModels\DirectoryViewModel.cs" />
     <Compile Include="ViewModels\FileViewModel.cs" />

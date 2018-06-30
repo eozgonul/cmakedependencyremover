@@ -42,3 +42,5 @@ CmakeDependencyRemover\.UI/obj/
 CmakeDependencyRemover\.UI/CmakeDependencyRemover\.UI\.csproj\.user
 
 packages/
+
+\.vs/

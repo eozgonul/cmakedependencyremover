@@ -15,7 +15,8 @@ namespace CmakeDependencyRemover.UI.ViewModels
     class DirectoryView
     {
         readonly ReadOnlyCollection<DirectoryViewModel> directoryViewModels;
-        
+        ObservableCollection<FileViewModel> openFiles;
+
         public DirectoryView(DirectoryInfo[] directoryInfos)
         {
             directoryViewModels = new ReadOnlyCollection<DirectoryViewModel>(
@@ -23,12 +24,19 @@ namespace CmakeDependencyRemover.UI.ViewModels
                  select new DirectoryViewModel(directory))
                  .ToList());
 
+            openFiles = new ObservableCollection<FileViewModel>();
+
             TreeNodeDoubleClickEvent = new DelegateCommand<TreeViewItemViewModel>(MouseDoubleClick);
         }
 
         public ReadOnlyCollection<DirectoryViewModel> Directories
         {
             get { return directoryViewModels; }
+        }
+
+        public ObservableCollection<FileViewModel> OpenFiles
+        {
+            get { return openFiles; }
         }
 
         public DelegateCommand<TreeViewItemViewModel> TreeNodeDoubleClickEvent { get; set; }
@@ -42,6 +50,8 @@ namespace CmakeDependencyRemover.UI.ViewModels
             else if(viewModel is FileViewModel)
             {
                 var test = ((FileViewModel)viewModel).FileName;
+
+                OpenFiles.Add((FileViewModel)viewModel);
             }
         }
     }

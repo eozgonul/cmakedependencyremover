@@ -29,6 +29,8 @@ namespace CmakeDependencyRemover.UI
 
             InitializeSubComponents();
 
+            //this.DataContext = new ViewModels.MainWindowView();
+            //tc_FileContents.DataContext = new ViewModels.TabControlView();
         }
 
         private void InitializeSubComponents()
@@ -62,7 +64,10 @@ namespace CmakeDependencyRemover.UI
         {
             ClearSolutionFiles();
             var directoryInfos = new DirectoryInfo[] { new DirectoryInfo(selectedDirectory) };
-            tv_SolutionFiles.DataContext = new ViewModels.DirectoryView(directoryInfos);
+            var directoryView = new ViewModels.DirectoryView(directoryInfos);
+
+            tv_SolutionFiles.DataContext = directoryView;
+            tc_FileContents.DataContext = directoryView;
         }
 
         private void ClearSolutionFiles()
@@ -98,7 +103,7 @@ namespace CmakeDependencyRemover.UI
 
         private void OpenFileInTab(string filePath, FileInfo fileInformation)
         {
-            tc_FileContents.OpenFile(fileInformation);
+            //tc_FileContents.OpenFile(fileInformation);
         }
     }
 }
