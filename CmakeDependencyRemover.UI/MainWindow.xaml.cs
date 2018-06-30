@@ -59,7 +59,8 @@ namespace CmakeDependencyRemover.UI
         {
             Close();
         }
-                private void LoadSolutionDirectory(string selectedDirectory)
+
+        private void LoadSolutionDirectory(string selectedDirectory)
         {
             ClearSolutionFiles();
             var directoryInfos = new DirectoryInfo[] { new DirectoryInfo(selectedDirectory) };
@@ -82,27 +83,6 @@ namespace CmakeDependencyRemover.UI
             filesToDelete.AddRange(DirectoryManager.GetAllFilesWithName(directoryPath, "ZERO_CHECK"));
 
             return filesToDelete;
-        }
-
-        private void OnTreeViewItemClicked(object sender, MouseButtonEventArgs mouseButtonEventArgs)
-        {
-            var treeViewItem = (TreeViewItem)(sender);
-            //var parentItem = (TreeViewItem)(treeViewItem.Parent);
-            
-            //if(parentItem != null && parentItem is TreeViewItem)
-            //{
-            //    var fileFullPath = /*SolutionDirectory + @"\" + */parentItem.Tag.ToString() + @"\" + treeViewItem.Header;
-                //OpenFileInTab(fileFullPath, treeViewItem.FileInformation);
-            //}
-
-          
-            var header = treeViewItem.Header.ToString();
-
-        }
-
-        private void OpenFileInTab(string filePath, FileInfo fileInformation)
-        {
-            //tc_FileContents.OpenFile(fileInformation);
         }
     }
 }
