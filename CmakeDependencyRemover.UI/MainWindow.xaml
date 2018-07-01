@@ -55,23 +55,22 @@
                 </i:EventTrigger>
             </i:Interaction.Triggers>
         </TreeView>
-        <!--
-        <local2:MainTabControl x:Name="tc_FileContents" Margin="151,20,0,0" />
-        -->
         <TabControl x:Name="tc_FileContents" Margin="151,20,0,0" ItemsSource="{Binding OpenFiles}" SelectedItem="{Binding CurrentItem, Mode=TwoWay}" SelectedIndex="{Binding SelectedIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
             <TabControl.ItemTemplate>
                 <DataTemplate>
-                    <StackPanel Orientation="Horizontal">
+                    <DockPanel>
                         <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
                         <Button Content="x" Command="{Binding CloseCommand, Mode=OneWay}"/>
-                    </StackPanel>
+                    </DockPanel>
                 </DataTemplate>
             </TabControl.ItemTemplate>
             <TabControl.ContentTemplate>
                 <DataTemplate>
-                    <StackPanel>
-                        <TextBox Text="{Binding Content, Mode=OneWay}"/>
-                    </StackPanel>
+                    <DockPanel Height="Auto" Width="Auto">
+                        <ScrollViewer VerticalScrollBarVisibility="Visible" Height="Auto" Width="Auto">
+                            <TextBox Text="{Binding Content, Mode=OneWay}"/>
+                        </ScrollViewer>
+                    </DockPanel>
                 </DataTemplate>
             </TabControl.ContentTemplate>
         </TabControl>
