@@ -52,17 +52,17 @@ namespace CmakeDependencyRemover.UI.ViewModels
                 if(value != isExpanded)
                 {
                     isExpanded = value;
-                    this.OnPropertyChanged("IsExpanded");
+                    OnPropertyChanged("IsExpanded");
                 }
 
                 if(isExpanded && Parent != null)
                 {
                     Parent.IsExpanded = true;
                 }
-                if(this.HasDummyChild)
+                if(HasDummyChild)
                 {
-                    this.Children.Remove(DummyChild);
-                    this.LoadChildren();
+                    Children.Remove(DummyChild);
+                    LoadChildren();
                 }
             }
         }
@@ -75,7 +75,7 @@ namespace CmakeDependencyRemover.UI.ViewModels
                 if(value != isSelected)
                 {
                     isSelected = value;
-                    this.OnPropertyChanged("IsSelected");
+                    OnPropertyChanged("IsSelected");
                 }
             }
         }
