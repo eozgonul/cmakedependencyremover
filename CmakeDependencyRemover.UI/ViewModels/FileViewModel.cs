@@ -12,7 +12,7 @@ namespace CmakeDependencyRemover.UI.ViewModels
     {
         readonly FileInfo fileInfo;
 
-        public FileViewModel(FileInfo fileInfo) : base(null, true)
+        public FileViewModel(FileInfo fileInfo) : base(null, false)
         {
             this.fileInfo = fileInfo;
         }
