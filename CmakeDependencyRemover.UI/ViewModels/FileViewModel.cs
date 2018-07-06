@@ -22,10 +22,7 @@ namespace CmakeDependencyRemover.UI.ViewModels
             get { return fileInfo.Name; }
         }
 
-        protected override void LoadChildren()
-        {
-            base.LoadChildren();
-        }
+        protected override void LoadChildren() => base.LoadChildren();
 
         public string Content
         {

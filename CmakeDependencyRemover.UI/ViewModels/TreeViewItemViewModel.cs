@@ -12,21 +12,18 @@ namespace CmakeDependencyRemover.UI.ViewModels
     class TreeViewItemViewModel : INotifyPropertyChanged
     {
         static readonly TreeViewItemViewModel DummyChild = new TreeViewItemViewModel();
-        readonly ObservableCollection<TreeViewItemViewModel> children;
-
         bool isExpanded;
         bool isSelected;
-
 
         protected TreeViewItemViewModel(TreeViewItemViewModel parent, bool lazyLoadChildren)
         {
             Parent = parent;
 
-            children = new ObservableCollection<TreeViewItemViewModel>();
+            Children = new ObservableCollection<TreeViewItemViewModel>();
 
             if(lazyLoadChildren)
             {
-                children.Add(DummyChild);
+                Children.Add(DummyChild);
             }
         }
 
@@ -34,32 +31,26 @@ namespace CmakeDependencyRemover.UI.ViewModels
         {
         }
 
-        public ObservableCollection<TreeViewItemViewModel> Children
-        {
-            get { return children; }
-        }
+        public ObservableCollection<TreeViewItemViewModel> Children { get; }
 
-        public bool HasDummyChild
-        {
-            get { return Children.Count == 1 && Children[0] == DummyChild; }
-        }
+        public bool HasDummyChild => Children.Count == 1 && Children[0] == DummyChild;
 
         public bool IsExpanded
         {
-            get { return isExpanded; }
+            get => isExpanded;
             set
             {
-                if(value != isExpanded)
+                if (value != isExpanded)
                 {
                     isExpanded = value;
                     OnPropertyChanged("IsExpanded");
                 }
 
-                if(isExpanded && Parent != null)
+                if (isExpanded && Parent != null)
                 {
                     Parent.IsExpanded = true;
                 }
-                if(HasDummyChild)
+                if (HasDummyChild)
                 {
                     Children.Remove(DummyChild);
                     LoadChildren();
@@ -69,10 +60,10 @@ namespace CmakeDependencyRemover.UI.ViewModels
 
         public bool IsSelected
         {
-            get { return isSelected; }
+            get => isSelected;
             set
             {
-                if(value != isSelected)
+                if (value != isSelected)
                 {
                     isSelected = value;
                     OnPropertyChanged("IsSelected");
@@ -88,9 +79,9 @@ namespace CmakeDependencyRemover.UI.ViewModels
 
         protected virtual void OnPropertyChanged(string propertyName)
         {
-            if(this.PropertyChanged != null)
+            if(PropertyChanged != null)
             {
-                this.PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
+                PropertyChanged(this, new PropertyChangedEventArgs(propertyName));
             }
         }
     }
