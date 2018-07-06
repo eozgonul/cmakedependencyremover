@@ -10,69 +10,87 @@
         mc:Ignorable="d"
         Title="CMake Dependency Remover" Height="350" Width="525">
     <Grid>
-        <Menu Height="20" VerticalAlignment="Top">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="20"/>
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
+        <Menu Grid.Row="0" VerticalAlignment="Top">
             <MenuItem x:Name="mi_File" Header="File" Height="20" Width="67">
                 <MenuItem x:Name="mi_LoadSolution" Header="LoadSolution"/>
                 <MenuItem x:Name="mi_Exit" Header="Exit"/>
             </MenuItem>
         </Menu>
-        <TreeView x:Name="tv_SolutionFiles" HorizontalAlignment="Left" Width="146" Margin="0,20,0,0" ItemsSource="{Binding Directories}">
-            <TreeView.ItemContainerStyle>
-                <Style TargetType="{x:Type TreeViewItem}" >
-                    <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
-                    <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
-                    <Style.Triggers>
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="FontWeight" Value="Bold"/>
-                        </Trigger>
-                    </Style.Triggers>
-                </Style>
-            </TreeView.ItemContainerStyle>
-            <TreeView.Resources>
-                <HierarchicalDataTemplate
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions >
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="5"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+            <TreeView   Grid.Column="0"
+                        x:Name="tv_SolutionFiles" 
+                        ItemsSource="{Binding Directories}" >
+                <TreeView.ItemContainerStyle>
+                    <Style TargetType="{x:Type TreeViewItem}" >
+                        <Setter Property="IsExpanded" Value="{Binding IsExpanded, Mode=TwoWay}" />
+                        <Setter Property="IsSelected" Value="{Binding IsSelected, Mode=TwoWay}" />
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="FontWeight" Value="Bold"/>
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </TreeView.ItemContainerStyle>
+                <TreeView.Resources>
+                    <HierarchicalDataTemplate
                     DataType="{x:Type viewmodels:DirectoryViewModel}"
                     ItemsSource="{Binding Children}"
                     >
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Margin="3,0" />
-                        <TextBlock Text="{Binding DirectoryName}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-                <HierarchicalDataTemplate
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" />
+                            <TextBlock Text="{Binding DirectoryName}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                    <HierarchicalDataTemplate
                     DataType="{x:Type viewmodels:FileViewModel}"
                     ItemsSource="{Binding Children}"
                     >
-                    <StackPanel Orientation="Horizontal">
-                        <Image Width="16" Height="16" Margin="3,0" />
-                        <TextBlock Text="{Binding FileName}" />
-                    </StackPanel>
-                </HierarchicalDataTemplate>
-            </TreeView.Resources>
-            <i:Interaction.Triggers>
-                <i:EventTrigger EventName="MouseDoubleClick">
-                    <prism:InvokeCommandAction Command="{Binding TreeNodeDoubleClickEvent}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}">
-                    </prism:InvokeCommandAction>
-                </i:EventTrigger>
-            </i:Interaction.Triggers>
-        </TreeView>
-        <TabControl x:Name="tc_FileContents" Margin="151,20,0,0" ItemsSource="{Binding OpenFiles}" SelectedItem="{Binding CurrentItem, Mode=TwoWay}" SelectedIndex="{Binding SelectedIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}">
-            <TabControl.ItemTemplate>
-                <DataTemplate>
-                    <DockPanel>
-                        <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
-                        <Button Content="x" Command="{Binding CloseCommand, Mode=OneWay}"/>
-                    </DockPanel>
-                </DataTemplate>
-            </TabControl.ItemTemplate>
-            <TabControl.ContentTemplate>
-                <DataTemplate>
-                    <DockPanel Height="Auto" Width="Auto">
-                        <ScrollViewer VerticalScrollBarVisibility="Visible" Height="Auto" Width="Auto">
-                            <TextBox Text="{Binding Content, Mode=OneWay}"/>
-                        </ScrollViewer>
-                    </DockPanel>
-                </DataTemplate>
-            </TabControl.ContentTemplate>
-        </TabControl>
+                        <StackPanel Orientation="Horizontal">
+                            <Image Width="16" Height="16" Margin="3,0" />
+                            <TextBlock Text="{Binding FileName}" />
+                        </StackPanel>
+                    </HierarchicalDataTemplate>
+                </TreeView.Resources>
+                <i:Interaction.Triggers>
+                    <i:EventTrigger EventName="MouseDoubleClick">
+                        <prism:InvokeCommandAction Command="{Binding TreeNodeDoubleClickEvent}" CommandParameter="{Binding Path=SelectedItem, RelativeSource={RelativeSource FindAncestor, AncestorType={x:Type TreeView}}}">
+                        </prism:InvokeCommandAction>
+                    </i:EventTrigger>
+                </i:Interaction.Triggers>
+            </TreeView>
+            <GridSplitter Grid.Column="1" HorizontalAlignment="Stretch" VerticalAlignment="Stretch" Width="5"/>
+            <TabControl Grid.Column="2" 
+                        x:Name="tc_FileContents" 
+                        ItemsSource="{Binding OpenFiles}" 
+                        SelectedItem="{Binding CurrentItem, Mode=TwoWay}" 
+                        SelectedIndex="{Binding SelectedIndex, Mode=OneWay, UpdateSourceTrigger=PropertyChanged}" >
+                <TabControl.ItemTemplate>
+                    <DataTemplate>
+                        <DockPanel>
+                            <TextBlock Text="{Binding FileName, Mode=OneWay}"/>
+                            <Button Content="x" Command="{Binding CloseCommand, Mode=OneWay}"/>
+                        </DockPanel>
+                    </DataTemplate>
+                </TabControl.ItemTemplate>
+                <TabControl.ContentTemplate>
+                    <DataTemplate>
+                        <DockPanel Height="Auto" Width="Auto">
+                            <ScrollViewer VerticalScrollBarVisibility="Visible" Height="Auto" Width="Auto">
+                                <TextBox Text="{Binding Content, Mode=OneWay}"/>
+                            </ScrollViewer>
+                        </DockPanel>
+                    </DataTemplate>
+                </TabControl.ContentTemplate>
+            </TabControl>
+        </Grid>
     </Grid>
 </Window>
